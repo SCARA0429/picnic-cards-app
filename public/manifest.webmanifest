@@ -1,0 +1,9 @@
+{
+  "name": "Picnic Cards",
+  "short_name": "Picnic Cards",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#11100f",
+  "theme_color": "#11100f",
+  "description": "A mobile card deck for meaningful picnic conversations."
+}
