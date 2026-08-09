@@ -45,6 +45,16 @@ h1{font-size:24px;margin:3px 0 0;letter-spacing:-.4px}
 }
 .card.back{background:#8e2430;color:white}
 .card.front{background:#f7f2e8;color:#171412}
+.card.moment.back{background:#070707;color:#f7f7f7;border:1px solid rgba(255,255,255,.15);box-shadow:0 28px 80px rgba(0,0,0,.45)}
+.card.moment.front{background:#000000;color:#f7f7f7;border:1px solid rgba(255,255,255,.16);box-shadow:0 28px 80px rgba(0,0,0,.5)}
+.card.moment .moment-instruction{color:#d7d7d7}
+.card.moment .timer-start,
+.card.moment .timer-stop{background:#f7f7f7;color:#111}
+.moment-note,
+.moment-ongoing{
+  margin-top:16px;font-size:12px;line-height:1.4;opacity:.72;color:#f0f0f0;
+}
+.moment-skip{margin-top:16px;border:0;border-radius:999px;background:rgba(255,255,255,.1);color:#f7f7f7;padding:12px 18px;font-size:14px;cursor:pointer}
 .face-content{width:100%}
 .category{text-transform:uppercase;letter-spacing:2.2px;font-weight:900;font-size:14px}
 .tap{margin-top:13px;font-size:13px;opacity:.72}

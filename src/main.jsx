@@ -175,18 +175,41 @@ const ALL_CARDS = [
 
 
 const MOMENTS = [
-  { title: "Lock Eyes", instruction: "Look into each other’s eyes without talking.", seconds: 40 },
-  { title: "Hold Hands", instruction: "Hold hands and just sit together for a moment.", seconds: 30 },
-  { title: "Eyes Closed", instruction: "Close your eyes, hold hands, and stay quiet together.", seconds: 30 },
-  { title: "Long Hug", instruction: "Give each other a proper hug. No rushing it.", seconds: 30 },
-  { title: "Cuddle Break", instruction: "Get comfortable and cuddle for a little while.", seconds: 60 },
-  { title: "Forehead Touch", instruction: "Rest your foreheads together and stay there.", seconds: 20 },
-  { title: "Compliment Close-Up", instruction: "Hold hands and tell each other one thing you genuinely admire about the other person.", seconds: 45 },
-  { title: "Silent Appreciation", instruction: "Look at each other and think of one thing you’re grateful for about this moment. Share it when the timer ends.", seconds: 30 },
-  { title: "Lean On Me", instruction: "One person rests their head on the other’s shoulder. Switch halfway.", seconds: 40 },
-  { title: "Kiss", instruction: "If you both want to, share a kiss. No timer pressure, just enjoy the moment.", seconds: 15 },
-  { title: "Hand Trace", instruction: "Hold hands and slowly trace the lines of each other’s palm.", seconds: 30 },
-  { title: "Close & Breathe", instruction: "Sit close, hold hands, and take a few slow breaths together.", seconds: 30 }
+  { title: "Lock Eyes", instruction: "Look into each other’s eyes without talking.", seconds: 40, momentType: "synchrony" },
+  { title: "Hold Hands", instruction: "Hold hands and keep playing like this for the rest of the game. Either person can stop whenever they want.", ongoing: true, momentType: "touch" },
+  { title: "Eyes Closed", instruction: "Close your eyes, hold hands, and stay quiet together.", seconds: 30, momentType: "synchrony" },
+  { title: "Long Hug", instruction: "Give each other a proper hug. No rushing it.", seconds: 30, momentType: "touch", optional: true },
+  { title: "Cuddle Break", instruction: "Get comfortable and cuddle up. Keep playing the game like this for the rest of the game.", ongoing: true, momentType: "romantic", optional: true },
+  { title: "Forehead Touch", instruction: "Rest your foreheads together and stay there while continuing the game. Either person can stop when they want.", ongoing: true, momentType: "touch" },
+  { title: "Compliment Close-Up", instruction: "Hold hands and tell each other one thing you genuinely admire about the other person.", seconds: 45, momentType: "appreciation" },
+  { title: "Silent Appreciation", instruction: "Look at each other and think of one thing you’re grateful for about this moment. Share it when the timer ends.", seconds: 30, momentType: "appreciation" },
+  { title: "Lean On Me", instruction: "Lean against each other or rest your head on your partner while you keep playing. Either person can stop whenever they want.", ongoing: true, momentType: "touch" },
+  { title: "Kiss", instruction: "If you both want to, share a kiss. No timer pressure, just enjoy the moment.", momentType: "romantic", optional: true },
+  { title: "Hand Trace", instruction: "Hold hands and slowly trace the lines of each other’s palm.", seconds: 30, momentType: "touch" },
+  { title: "Close & Breathe", instruction: "Sit close, hold hands, and take a few slow breaths together.", seconds: 30, momentType: "synchrony" },
+  { title: "Follow My Breath", instruction: "Sit facing each other and hold hands. Breathe slowly together without trying too hard to match each other. Just notice the rhythm.", seconds: 45, momentType: "synchrony" },
+  { title: "No Words", instruction: "Look into each other’s eyes without speaking. Smiling and laughing are allowed. Just stay present.", seconds: 45, momentType: "synchrony" },
+  { title: "Three Things", instruction: "Take turns telling each other three things you genuinely like or appreciate about the other person. No interrupting and no rejecting the compliment.", momentType: "appreciation" },
+  { title: "Tell Me More", instruction: "One person shares something that's been on their mind lately. The other person listens without fixing it. Ask 'Tell me more' and give them your full attention. Afterwards, switch roles.", seconds: 60, momentType: "vulnerability" },
+  { title: "Your Turn To Be Held", instruction: "One person relaxes into a hug while the other simply holds them. Switch halfway.", seconds: 40, momentType: "touch", optional: true },
+  { title: "Face Touch", instruction: "If you're both comfortable, gently hold or stroke each other's cheek while looking at one another.", seconds: 20, momentType: "touch", optional: true },
+  { title: "Favourite Detail", instruction: "Look at each other closely. Tell the other person one small physical or personality detail you've noticed about them that you really like.", momentType: "appreciation" },
+  { title: "Our Song Moment", instruction: "Choose a song. Hold each other, sway together, or just sit close. Don't talk until the timer ends.", seconds: 60, momentType: "synchrony", optional: true },
+  { title: "Safe With You", instruction: "Take turns finishing this sentence: 'Something that would make me feel safer opening up to you is...' The other person just listens.", momentType: "vulnerability" },
+  { title: "What Do You Need?", instruction: "Ask each other: 'Right now, would you rather have a hug, a kiss, hold hands, cuddle, sit close, or have some space?' Respect whatever they choose.", momentType: "appreciation" },
+  { title: "Kiss Me Slowly", instruction: "If you both want to, share a slow kiss. There's nothing to complete and no timer. Stop whenever either of you wants.", seconds: 30, momentType: "romantic", optional: true },
+  { title: "Closer", instruction: "Sit as close as feels comfortable, hold each other, and play the game while staying there. Either person can stop whenever they want.", ongoing: true, momentType: "touch", optional: true },
+  { title: "Kiss, Your Way", instruction: "If you both want to kiss, kiss however feels natural to both of you. You decide what kind of kiss and when to stop.", momentType: "romantic", optional: true },
+  { title: "Your Choice", instruction: "Choose one together: hold hands, forehead kiss, cheek kiss, hug, cuddle, kiss, sit close, or skip.", momentType: "playful" },
+  { title: "Listen To Me", instruction: "One person talks for one minute about something important to them. The other person doesn't interrupt, advise, or solve anything. Just listen.", seconds: 60, momentType: "vulnerability" },
+  { title: "Heartbeat", instruction: "If you're both comfortable, rest your head against your partner's chest and listen to their heartbeat. Switch halfway.", seconds: 40, momentType: "touch", optional: true },
+  { title: "One Thing I See In You", instruction: "Finish the sentence: 'One thing I see in you that I don't think you always see in yourself is...' ", momentType: "appreciation" },
+  { title: "Thank You For...", instruction: "Look at each other and finish the sentence: 'Something I want to thank you for is...'", momentType: "appreciation" },
+  { title: "Hands, No Words", instruction: "Hold both of each other's hands. Don't talk. Keep playing as you stay there together.", ongoing: true, momentType: "synchrony" },
+  { title: "Make Me Smile", instruction: "You have 30 seconds to make the other person smile without touching your phone.", seconds: 30, momentType: "playful" },
+  { title: "Remember This", instruction: "Take a quiet moment and look around. Notice where you are, what the other person looks like, and how this moment feels. Then tell each other one thing you want to remember about today.", seconds: 30, momentType: "vulnerability" },
+  { title: "One Question", instruction: "You may ask the other person one question you've genuinely wanted to ask them but haven't yet.", momentType: "vulnerability" },
+  { title: "I Feel Closest To You When...", instruction: "Take turns finishing the sentence: 'I feel closest to you when...'", momentType: "vulnerability" }
 ];
 
 function weaveMoments(cards) {
@@ -245,6 +268,7 @@ function App() {
   const [dragX, setDragX] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [timerComplete, setTimerComplete] = useState(false);
   const timerRef = useRef(null);
   const startX = useRef(null);
 
@@ -269,12 +293,16 @@ function App() {
     setIndex(i => (i + 1) % deck.length);
     setRevealed(false);
     setDragX(0);
+    setTimerComplete(false);
+    setTimeLeft(0);
   }
 
   function prev() {
     setIndex(i => (i - 1 + deck.length) % deck.length);
     setRevealed(false);
     setDragX(0);
+    setTimerComplete(false);
+    setTimeLeft(0);
   }
 
   function onPointerDown(e) {
@@ -307,11 +335,13 @@ function App() {
     clearInterval(timerRef.current);
     setTimeLeft(seconds);
     setTimerRunning(true);
+    setTimerComplete(false);
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) {
           clearInterval(timerRef.current);
           setTimerRunning(false);
+          setTimerComplete(true);
           if (navigator.vibrate) navigator.vibrate([180, 100, 180]);
           return 0;
         }
@@ -323,7 +353,13 @@ function App() {
   function stopTimer() {
     clearInterval(timerRef.current);
     setTimerRunning(false);
+    setTimerComplete(false);
+    setTimeLeft(0);
   }
+
+  React.useEffect(() => {
+    return () => clearInterval(timerRef.current);
+  }, []);
 
   return (
     <main className="app">
@@ -351,7 +387,7 @@ function App() {
         <div className="stack stack-1" />
         <div className="stack stack-2" />
         <article
-          className={"card " + (revealed ? "front" : "back")}
+          className={"card " + (current.type === "moment" ? "moment " : "") + (revealed ? "front" : "back")}
           style={{ transform: `translateX(${dragX}px) rotate(${dragX / 28}deg)` }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -368,13 +404,28 @@ function App() {
               <div className="moment-label">MOMENT</div>
               <div className="moment-title">{current.title}</div>
               <div className="moment-instruction">{current.instruction}</div>
+              {current.seconds > 0 && !current.ongoing && (
+                <button
+                  className="timer-start"
+                  onPointerDown={e => e.stopPropagation()}
+                  onClick={e => { e.stopPropagation(); startTimer(current.seconds); }}
+                >
+                  Start {current.seconds}s timer
+                </button>
+              )}
+              {current.ongoing && (
+                <div className="moment-ongoing">For the rest of the game. Either person can stop whenever they want.</div>
+              )}
               <button
-                className="timer-start"
+                className="moment-skip"
                 onPointerDown={e => e.stopPropagation()}
-                onClick={e => { e.stopPropagation(); startTimer(current.seconds); }}
+                onClick={e => { e.stopPropagation(); next(); }}
               >
-                Start {current.seconds}s timer
+                Skip moment
               </button>
+              {current.optional && (
+                <div className="moment-note">Only if you're both comfortable.</div>
+              )}
             </div>
           ) : (
             <div className="face-content">
@@ -397,13 +448,15 @@ function App() {
       <button className="shuffle" onClick={() => rebuild(category)}>Shuffle deck</button>
       <div className="hint">Tap to reveal • Swipe left/right • Moment cards appear between questions</div>
 
-      {(timerRunning || timeLeft === 0) && timerRunning && (
+      {(timerRunning || timerComplete) && (
         <div className="timer-overlay">
           <div className="timer-sheet">
             <div className="timer-caption">Stay in the moment</div>
-            <div className="timer-number">{timeLeft}</div>
-            <div className="timer-unit">seconds</div>
-            <button onClick={stopTimer} className="timer-stop">End timer</button>
+            <div className="timer-number">{timerComplete ? "Time ❤️" : timeLeft}</div>
+            {!timerComplete && <div className="timer-unit">seconds</div>}
+            <button onClick={stopTimer} className="timer-stop">
+              {timerComplete ? "Continue" : "End timer"}
+            </button>
           </div>
         </div>
       )}
