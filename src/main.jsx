@@ -473,135 +473,76 @@ const VOLUME_TWO_CARDS = [
 ];
 
 const VOLUME_THREE_CARDS = [
-  ...cardsFromText("Perception", `
-What is the first thing you noticed about me?
-What do you think is the hardest part of what I do for a living?
-What reality show do you think I'm most likely to watch?
-Between the two of us, who seems like the better texter? Explain.
-What was your first impression of me?
-Finish the sentence: Just by looking at you, I'd think __________.
-Do I seem like someone who would get a name tattooed on myself? Why or why not?
-If you were to buy me a present, knowing nothing about me other than what I look like, what would it be?
-What about me intrigues you?
-What does my Instagram tell you about me?
-Do I seem like more of a creative or analytical type?
-What do my shoes tell you about me?
-What subject do you think I thrived at in school, and did I fail any?
-Do you think I fall in love easily? Why or why not?
-What do you think I'm most likely to splurge on?
-How many speeding tickets do you think I've gotten in my life?
-How would you describe what you think my type is in three words?
-Do you think I've ever been fired from a job? If so, what for?
-What did you think about my first message?
-What's one thing you'll never say no to?
-As a child, what do you think I wanted to be?
-Do I seem like a morning person or a night owl?
-Am I someone you typically connect with?
-Do you think I was popular in school? Explain.
-What compliment do you think I hear the most?
-What's one piece of advice that really stuck with you?
-What movie or book do you think I'm most like, and why?
-Do you think I'm usually early, on time, or late to events? Explain.
-Do I intimidate you? Why or why not?
-What does my phone wallpaper tell you about me?
-Do you think I ever checked an ex's phone for evidence?
-Do I remind you of anyone you know?
-What do you think my type was before you?
-Something that brought a smile to my face this week was ______.
-What favorite song lyrics come to mind off the top of your head?
+  ...cardsFromText("Love", `
+What do you believe about love?
+What is love to you?
+What does it mean to love someone beyond just having feelings for them?
+What do you think are the foundations of a healthy relationship?
+What does loyalty mean to you in a relationship?
+What does it mean to be teachable in a relationship?
+Do you believe love requires change? If so, what kind of change?
+How do you know when someone truly loves you?
+Do you think loving someone means accepting them as they are, or also challenging each other to grow?
+What does commitment look like to you when things aren't going well?
+What makes love feel personal to you?
   `),
-  ...cardsFromText("Connection", `
-Are you lying to yourself about anything?
-What questions are you trying to answer most in your life right now?
-What's been your happiest memory this past year?
-Have you changed your mind about anything recently?
-When was the last time you surprised yourself?
-How would you describe the feeling of being in love in one word?
-Has a stranger ever changed your life?
-What insecurity of yours holds you back the most?
-How could you become a better person?
-What title would you give this chapter in your life?
-What's the worst pain you have ever been in that wasn't physical?
-What is something you wouldn't want to change about yourself?
-What's your first love's name, and why did you fall in love with them?
-What would your younger self not believe about your life today?
-What's your mom's name, and what is the most beautiful thing about her?
-What is a dream you let go of?
-If you could get to know someone in your life on a deeper level, who would it be and why?
-What part of your life works, and what part of your life hurts?
-Does the image you have of yourself match the image other people see?
-What's the nicest thing a friend or partner has ever done for you?
-What's the most embarrassing thing that happened to you on a date?
-What could you have done better in previous relationships?
-Do you think I intimidate others? Why or why not?
-When you are asked how you are, how often do you answer truthfully?
-How are you, really?
-What's your least favorite question to be asked on a date? What do you wish you were asked more?
-What's the most unexplainable thing that has happened to you?
-Describe your perfect day.
-What dating advice would you give your younger self?
-What did the people who raised you teach you about love?
-How old do you feel emotionally?
-Is there an image of yourself you project on a first date that you wish you could let go of?
-What are you passionate about?
-Who's your comfort person?
-If you could have it your way, who would you be with, where would you be, and what would you be doing?
-If you had to choose a song that represents me, what would it be and why?
-What are you feeling a lot of today?
-What are you not currently giving enough time to?
-When was the last time you felt truly understood by somebody? Who was it, and what did they understand?
-When was the last time you cried?
+  ...cardsFromText("Knowing Each Other", `
+What does it mean to truly know your partner?
+Do you feel like you know me deeply? Why or why not?
+What are some things about me you still want to learn?
+What parts of yourself do you feel I don't fully understand yet?
+What are your goals for yourself over the next year?
+What do you want your partner to understand about the person you're becoming?
+What makes you feel genuinely seen and understood by your partner?
+What does quality time mean to you?
+How important is communication to you in a relationship?
+What makes you feel emotionally connected to your partner?
   `),
-  ...cardsFromText("Reflection", `
-What do you think my superpower is?
-Admit something.
-What about me surprised you?
-How would you describe me to a stranger?
-What do you think our most important similarities are?
-Based on what you learned about me, what would you recommend I read?
-What is one thing I could do that would drastically improve my life?
-I want to give myself permission to feel ___________.
-What can I help you with?
-What do you think comes easily to me that's hard for others?
-What parts of yourself do you see in me?
-Where am I most qualified to give advice?
-What would be the perfect gift for me?
-What do I need to hear right now?
-What answer of mine made you light up?
-What question were you most afraid to answer?
-How does someone earn your vulnerability?
-Based on what you've learned about me, does my social media portray me accurately?
-What would you remember about me if we ever cut contact?
-When this game is over, what will you remember about me?
-What do you think my weakness is?
-What do you admire most about me?
-What's the most attractive quality about me that isn't physical?
-What can we create together?
-Dare your partner to do something outside their comfort zone next week.
-What is a lesson you will take away from our conversation?
-What do you think I fear the most?
-How can someone show you they love you without saying the word?
-What do you recommend I should let go of?
-What about me is the hardest for you to understand?
-If we were a band, what would our name be?
-What has this conversation taught you about yourself?
-What do you think my defining characteristic is?
-Why do you think we met?
-How do our personalities complement each other?
-What are you still trying to prove to yourself?
-What do you think I should know about myself that perhaps I'm unaware of?
-What would make you feel closer to me?
-How do you think our lives would be different if we didn't meet?
-If you could pick one word to describe our connection, what would it be?
-What's something that reminds you of me?
-Do you think our connection has influenced your personal growth?
-Am I like you expected me to be?
-What do you think is the biggest obstacle in my life right now?
-In one word, describe how you feel now.
-Do you believe everyone has a calling? If so, do you think I've found mine?
-What have you witnessed recently that has given you hope for humanity, in any big or small way?
-What do you think is the biggest lesson I've taught you?
-What's a challenge you think we overcame together as a team?
+  ...cardsFromText("Needs & Expectations", `
+What do you need from your partner to feel loved?
+What do you need from me specifically?
+What do you think your responsibility is toward my needs?
+What needs do you believe are your own responsibility and shouldn't be placed entirely on your partner?
+How should two people handle it when their needs are different?
+What does meeting each other halfway actually look like to you?
+Are there needs you have that you haven't communicated to me?
+Are there needs I've expressed that you feel you struggle to meet?
+How should we tell each other when we're not feeling loved or considered?
+What does reassurance look like for you?
+  `),
+  ...cardsFromText("Our Relationship", `
+What do you think makes our relationship special?
+What do you think makes our relationship powerful?
+What do you think we're doing well?
+Where do you think we're struggling?
+Do you feel like we're growing together or becoming stagnant? Why?
+How do you honestly feel about our communication right now?
+Do you feel emotionally connected to me right now?
+Do you feel like we're intentional about spending time with each other?
+What do you think we need more of in our relationship?
+What do you think we need less of?
+Is there anything you've been feeling in our relationship that you haven't known how to bring up?
+What is one thing you think I could improve as your partner?
+What is one thing you think you could improve as my partner?
+What would make you feel more loved by me?
+What would make me feel more loved by you?
+  `),
+  ...cardsFromText("Deeper", `
+Do you think loving someone is enough to make a relationship work? Why or why not?
+What does choosing someone look like to you beyond saying “I love you”?
+If you know your partner has a need you struggle with, what do you think your responsibility is?
+When you realise you're hurting your partner unintentionally, what do you think love requires you to do?
+What does it mean to be a safe person for your partner?
+How do you want us to handle conflict when one of us feels hurt?
+What does healthy communication look like when you're overwhelmed?
+What do you think your partner should never have to beg for?
+What does being intentional with someone you love look like?
+What do you think we owe each other in a relationship?
+What would make you look back a year from now and say, “Our relationship has genuinely grown”?
+What are you willing to change about yourself for the sake of our relationship?
+What are you unwilling to compromise on in a relationship?
+What does being loved by me look like to you?
+Do you feel like I am loving you in the way you need to be loved? And if not, what would you want me to understand?
   `)
 ];
 
@@ -702,23 +643,49 @@ const VOLUME_THREE_WILD_CARDS = [
   { category: "Wild Card", type: "wild", instruction: "Write a message to each other on small pieces of paper. Open it after you've left." }
 ];
 
+// Moments and wild cards are shared across every volume, so any of them can show up
+// no matter which volume you're playing.
+const CROSS_VOLUME_MOMENTS = [...VOLUME_ONE_MOMENTS, ...VOLUME_TWO_MOMENTS, ...VOLUME_THREE_WILD_CARDS];
+
+// This one is guaranteed to show up in every volume's deck, exactly once.
+const MUST_INCLUDE_MOMENT = VOLUME_THREE_WILD_CARDS.find(
+  c => c.instruction === "Write a message to each other on small pieces of paper. Open it after you've left."
+);
+
 const VOLUMES = {
-  1: { label: "Volume 1", note: "Original", cards: VOLUME_ONE_CARDS, moments: VOLUME_ONE_MOMENTS },
+  1: { label: "Volume 1", note: "Original", cards: VOLUME_ONE_CARDS, moments: CROSS_VOLUME_MOMENTS },
   2: {
     label: "Volume 2",
     note: "New questions",
     cards: VOLUME_TWO_CARDS,
-    moments: VOLUME_TWO_MOMENTS,
+    moments: CROSS_VOLUME_MOMENTS,
     momentRule: "Both comfortable, or skip. No explanation needed."
   },
-  3: { label: "Volume 3", note: "Three levels", cards: VOLUME_THREE_CARDS, moments: VOLUME_THREE_WILD_CARDS }
+  3: { label: "Volume 3", note: "Three levels", cards: VOLUME_THREE_CARDS, moments: CROSS_VOLUME_MOMENTS }
 };
+
+// Appreciation and listening/vulnerability moments show up more often than the rest.
+const MOMENT_WEIGHTS = { appreciation: 2, vulnerability: 2 };
+
+function weightedMomentPool(moments) {
+  const pool = [];
+  moments.forEach(m => {
+    const copies = MOMENT_WEIGHTS[m.momentType] || 1;
+    for (let i = 0; i < copies; i++) pool.push(m);
+  });
+  return pool;
+}
 
 function weaveMoments(cards, moments, momentRule) {
   const shuffledCards = shuffle(cards);
-  const shuffledMoments = shuffle(moments);
+  // The must-include moment is guaranteed separately below, so it's left out of the
+  // random pool here to avoid it potentially showing up twice.
+  const randomPool = moments.filter(m => m !== MUST_INCLUDE_MOMENT);
+  const shuffledMoments = shuffle(weightedMomentPool(randomPool));
   const out = [];
   let momentIndex = 0;
+  let callbackCount = 0;
+  const MAX_CALLBACKS = 3;
 
   // Usually around 5 questions, but intentionally unpredictable.
   // Possible gaps: 3–8 questions, weighted toward 4–6.
@@ -727,11 +694,19 @@ function weaveMoments(cards, moments, momentRule) {
     return gaps[Math.floor(Math.random() * gaps.length)];
   };
 
+  // Callbacks are rarer than moments so there's time to save something first.
+  const nextCallbackGap = () => {
+    const gaps = [6, 7, 7, 8, 8, 9];
+    return gaps[Math.floor(Math.random() * gaps.length)];
+  };
+
   let untilMoment = nextGap();
+  let untilCallback = nextCallbackGap();
 
   shuffledCards.forEach((card, i) => {
     out.push({ ...card, type: "question" });
     untilMoment--;
+    untilCallback--;
 
     if (untilMoment <= 0 && i < shuffledCards.length - 1 && momentIndex < shuffledMoments.length) {
       const m = shuffledMoments[momentIndex % shuffledMoments.length];
@@ -744,7 +719,25 @@ function weaveMoments(cards, moments, momentRule) {
       momentIndex++;
       untilMoment = nextGap();
     }
+
+    if (untilCallback <= 0 && i > 3 && i < shuffledCards.length - 1 && callbackCount < MAX_CALLBACKS) {
+      out.push({ category: "Callback", type: "callback" });
+      callbackCount++;
+      untilCallback = nextCallbackGap();
+    }
   });
+
+  if (MUST_INCLUDE_MOMENT) {
+    const guaranteed = {
+      ...MUST_INCLUDE_MOMENT,
+      category: MUST_INCLUDE_MOMENT.category || "Moment",
+      type: MUST_INCLUDE_MOMENT.type || "moment",
+      comfortRule: momentRule
+    };
+    out.splice(Math.floor(Math.random() * (out.length + 1)), 0, guaranteed);
+  }
+
+  out.push({ category: "Closing", type: "closing" });
 
   return out;
 }
@@ -758,6 +751,8 @@ function shuffle(items) {
   return arr;
 }
 
+const JOURNAL_KEY = "picnic-cards-journal-v1";
+
 function App() {
   const [volume, setVolume] = useState("1");
   const activeVolume = VOLUMES[volume];
@@ -768,7 +763,7 @@ function App() {
   );
 
   const [category, setCategory] = useState("All");
-  const [deck, setDeck] = useState(() => weaveMoments(VOLUME_ONE_CARDS, VOLUME_ONE_MOMENTS));
+  const [deck, setDeck] = useState(() => weaveMoments(VOLUME_ONE_CARDS, CROSS_VOLUME_MOMENTS));
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [dragX, setDragX] = useState(0);
@@ -778,16 +773,81 @@ function App() {
   const timerRef = useRef(null);
   const startX = useRef(null);
 
+  const [sessionStart, setSessionStart] = useState(() => Date.now());
+  const [journal, setJournal] = useState(() => {
+    try {
+      const raw = localStorage.getItem(JOURNAL_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [journalOpen, setJournalOpen] = useState(false);
+  const [savedThisCard, setSavedThisCard] = useState(false);
+  const [savedEntryId, setSavedEntryId] = useState(null);
+  const [noteDraft, setNoteDraft] = useState("");
+
   const current = deck[index];
+
+  const sessionEntries = useMemo(
+    () => journal.filter(e => e.savedAt >= sessionStart).sort((a, b) => b.savedAt - a.savedAt),
+    [journal, sessionStart]
+  );
+
+  React.useEffect(() => {
+    try {
+      localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal));
+    } catch {}
+  }, [journal]);
+
+  React.useEffect(() => {
+    setSavedThisCard(false);
+    setSavedEntryId(null);
+    setNoteDraft("");
+  }, [index, deck]);
+
+  function saveCurrentCard() {
+    if (savedThisCard || !current) return;
+    const text = current.type === "question"
+      ? current.q
+      : current.title
+        ? `${current.title} — ${current.instruction}`
+        : current.instruction;
+    const entry = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      category: current.category,
+      type: current.type,
+      text,
+      note: "",
+      savedAt: Date.now()
+    };
+    setJournal(j => [...j, entry]);
+    setSavedEntryId(entry.id);
+    setSavedThisCard(true);
+    setNoteDraft("");
+  }
+
+  function updateNote(value) {
+    setNoteDraft(value);
+    setJournal(j => j.map(e => (e.id === savedEntryId ? { ...e, note: value } : e)));
+  }
+
+  function deleteEntry(id) {
+    setJournal(j => j.filter(e => e.id !== id));
+  }
 
   function resetDeck(source, nextCategory, moments = activeVolume.moments, momentRule = activeVolume.momentRule) {
     const cards = nextCategory === "All"
       ? source
       : source.filter(c => c.category === nextCategory);
-    setDeck(nextCategory === "All" ? weaveMoments(cards, moments, momentRule) : shuffle(cards.map(c => ({...c, type:"question"}))));
+    const nextDeck = nextCategory === "All"
+      ? weaveMoments(cards, moments, momentRule)
+      : [...shuffle(cards.map(c => ({...c, type:"question"}))), { category: "Closing", type: "closing" }];
+    setDeck(nextDeck);
     setIndex(0);
     setRevealed(false);
     setDragX(0);
+    setSessionStart(Date.now());
   }
 
   function rebuild(nextCategory = category) {
@@ -834,6 +894,7 @@ function App() {
   }
 
   function onPointerUp() {
+    if (startX.current == null) return;
     if (Math.abs(dragX) > 70) {
       dragX < 0 ? next() : prev();
     } else {
@@ -889,7 +950,12 @@ function App() {
           <div className="eyebrow">PICNIC EDITION · {VOLUMES[volume].label.toUpperCase()}</div>
           <h1>Picnic Cards</h1>
         </div>
-        <div className="counter">{index + 1} / {deck.length}</div>
+        <div className="topbar-right">
+          <div className="counter">{index + 1} / {deck.length}</div>
+          <button className="journal-toggle" onClick={() => setJournalOpen(true)}>
+            ♥ {journal.length}
+          </button>
+        </div>
       </header>
 
       <div className="volume-switcher" aria-label="Choose a card volume">
@@ -922,17 +988,62 @@ function App() {
         <div className="stack stack-1" />
         <div className="stack stack-2" />
         <article
-          className={"card " + (current.type === "moment" ? "moment " : current.type === "wild" ? "wild " : "") + (revealed ? "front" : "back")}
+          className={"card " + (current.type === "moment" || current.type === "callback" || current.type === "closing" ? "moment " : current.type === "wild" ? "wild " : "")}
           style={{ transform: `translateX(${dragX}px) rotate(${dragX / 28}deg)` }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={() => { startX.current = null; setDragX(0); }}
         >
-          {!revealed ? (
+          <div key={index} className={"card-inner " + (revealed ? "revealed" : "")}>
+          <div className="card-face card-face-back">
             <div className="face-content">
               <div className="category">{current.category}</div>
-              <div className="tap">{current.type === "moment" ? "A little pause between questions" : current.type === "wild" ? "Something different" : "Tap to reveal"}</div>
+              <div className="tap">
+                {current.type === "moment" ? "A little pause between questions"
+                  : current.type === "wild" ? "Something different"
+                  : current.type === "callback" ? "A quick look back"
+                  : current.type === "closing" ? "One last thing"
+                  : "Tap to reveal"}
+              </div>
+            </div>
+            <div className="brandmark">PICNIC CARDS</div>
+          </div>
+          <div className="card-face card-face-front">
+          {current.type === "callback" ? (
+            <div className="face-content">
+              <div className="moment-label">CALLBACK</div>
+              {sessionEntries[0] ? (
+                <>
+                  <div className="moment-instruction">Go back to something you saved earlier tonight:</div>
+                  <div className="callback-quote">“{sessionEntries[0].text}”</div>
+                  {sessionEntries[0].note && (
+                    <div className="callback-note">You noted: “{sessionEntries[0].note}”</div>
+                  )}
+                  <div className="moment-instruction">Has anything changed since then, or does it still feel true?</div>
+                </>
+              ) : (
+                <div className="moment-instruction">Nothing saved yet tonight. Is there something already asked that you'd want to sit with a little longer?</div>
+              )}
+              <button
+                className="moment-skip"
+                onPointerDown={e => e.stopPropagation()}
+                onClick={e => { e.stopPropagation(); next(); }}
+              >
+                Continue
+              </button>
+            </div>
+          ) : current.type === "closing" ? (
+            <div className="face-content">
+              <div className="moment-label">BEFORE YOU GO</div>
+              <div className="moment-instruction">One thing that made you feel closer tonight?</div>
+              <button
+                className="moment-skip"
+                onPointerDown={e => e.stopPropagation()}
+                onClick={e => { e.stopPropagation(); rebuild(); }}
+              >
+                Shuffle & play again
+              </button>
             </div>
           ) : current.type === "moment" || current.type === "wild" ? (
             <div className="face-content">
@@ -964,14 +1075,48 @@ function App() {
               {current.comfortRule && (
                 <div className="moment-note moment-rule">{current.comfortRule}</div>
               )}
+              <div className="save-row" onPointerDown={e => e.stopPropagation()}>
+                <button
+                  className={"save-btn " + (savedThisCard ? "saved" : "")}
+                  onClick={e => { e.stopPropagation(); saveCurrentCard(); }}
+                >
+                  {savedThisCard ? "♥ Saved" : "♡ Save this"}
+                </button>
+                {savedThisCard && (
+                  <input
+                    className="save-note"
+                    placeholder="Add a one-line note (optional)"
+                    value={noteDraft}
+                    onChange={e => updateNote(e.target.value)}
+                  />
+                )}
+              </div>
             </div>
           ) : (
             <div className="face-content">
               <div className="question">{current.q}</div>
               <div className="rule">{ruleFor(current.category)}</div>
+              <div className="save-row" onPointerDown={e => e.stopPropagation()}>
+                <button
+                  className={"save-btn " + (savedThisCard ? "saved" : "")}
+                  onClick={e => { e.stopPropagation(); saveCurrentCard(); }}
+                >
+                  {savedThisCard ? "♥ Saved" : "♡ Save this"}
+                </button>
+                {savedThisCard && (
+                  <input
+                    className="save-note"
+                    placeholder="Add a one-line note (optional)"
+                    value={noteDraft}
+                    onChange={e => updateNote(e.target.value)}
+                  />
+                )}
+              </div>
             </div>
           )}
-          <div className="brandmark">PICNIC CARDS</div>
+            <div className="brandmark">PICNIC CARDS</div>
+          </div>
+          </div>
         </article>
       </section>
 
@@ -995,6 +1140,36 @@ function App() {
             <button onClick={stopTimer} className="timer-stop">
               {timerComplete ? "Continue" : "End timer"}
             </button>
+          </div>
+        </div>
+      )}
+
+      {journalOpen && (
+        <div className="journal-overlay" onClick={() => setJournalOpen(false)}>
+          <div className="journal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="journal-header">
+              <div className="journal-title">Saved moments</div>
+              <button className="journal-close" onClick={() => setJournalOpen(false)}>Close</button>
+            </div>
+            {journal.length === 0 ? (
+              <div className="journal-empty">Nothing saved yet. Tap the heart on a card to keep it.</div>
+            ) : (
+              <div className="journal-list">
+                {[...journal].sort((a, b) => b.savedAt - a.savedAt).map(entry => (
+                  <div key={entry.id} className="journal-entry">
+                    <div className="journal-entry-top">
+                      <span className="journal-entry-category">{entry.category}</span>
+                      <button className="journal-entry-delete" onClick={() => deleteEntry(entry.id)}>×</button>
+                    </div>
+                    <div className="journal-entry-text">{entry.text}</div>
+                    {entry.note && <div className="journal-entry-note">{entry.note}</div>}
+                    <div className="journal-entry-date">
+                      {new Date(entry.savedAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
