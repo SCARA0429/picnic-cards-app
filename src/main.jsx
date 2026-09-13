@@ -676,6 +676,17 @@ function weightedMomentPool(moments) {
   return pool;
 }
 
+// Categories substantive enough to warrant a Respond beat afterward.
+// The two icebreaker categories (Playful, Getting to Know You) are left out on purpose.
+const SUBSTANTIVE_CATEGORIES = new Set([
+  "Deeper", "Relationships", "How You See Me", "Story & Identity",
+  "Faith & Purpose", "Future & Compatibility", "Love", "Knowing Each Other",
+  "Needs & Expectations", "Our Relationship"
+]);
+const RESPOND_CHANCE = 0.25;
+const RESPOND_MIN_GAP = 4;
+const MAX_RESPONDS = 5;
+
 function weaveMoments(cards, moments, momentRule) {
   const shuffledCards = shuffle(cards);
   // The must-include moment is guaranteed separately below, so it's left out of the
@@ -686,6 +697,8 @@ function weaveMoments(cards, moments, momentRule) {
   let momentIndex = 0;
   let callbackCount = 0;
   const MAX_CALLBACKS = 3;
+  let respondCount = 0;
+  let sinceRespond = RESPOND_MIN_GAP;
 
   // Usually around 5 questions, but intentionally unpredictable.
   // Possible gaps: 3–8 questions, weighted toward 4–6.
@@ -707,6 +720,9 @@ function weaveMoments(cards, moments, momentRule) {
     out.push({ ...card, type: "question" });
     untilMoment--;
     untilCallback--;
+    sinceRespond++;
+
+    let placedSpecial = false;
 
     if (untilMoment <= 0 && i < shuffledCards.length - 1 && momentIndex < shuffledMoments.length) {
       const m = shuffledMoments[momentIndex % shuffledMoments.length];
@@ -718,12 +734,31 @@ function weaveMoments(cards, moments, momentRule) {
       });
       momentIndex++;
       untilMoment = nextGap();
+      placedSpecial = true;
     }
 
     if (untilCallback <= 0 && i > 3 && i < shuffledCards.length - 1 && callbackCount < MAX_CALLBACKS) {
       out.push({ category: "Callback", type: "callback" });
       callbackCount++;
       untilCallback = nextCallbackGap();
+      placedSpecial = true;
+    }
+
+    // Occasionally, after a substantive question, ask the listener to respond
+    // before moving on rather than letting the app just advance to the next card.
+    if (
+      !placedSpecial && i > 0 &&
+      SUBSTANTIVE_CATEGORIES.has(card.category) &&
+      sinceRespond >= RESPOND_MIN_GAP &&
+      respondCount < MAX_RESPONDS &&
+      i < shuffledCards.length - 1 &&
+      Math.random() < RESPOND_CHANCE
+    ) {
+      out.push({ category: "Respond", type: "respond" });
+      respondCount++;
+      sinceRespond = 0;
+      if (untilMoment <= 1) untilMoment = 2;
+      if (untilCallback <= 1) untilCallback = 2;
     }
   });
 
@@ -752,6 +787,12 @@ function shuffle(items) {
 }
 
 const JOURNAL_KEY = "picnic-cards-journal-v1";
+
+const RESPOND_CHOICES = {
+  reflect: { label: "Reflect", starter: "What I heard you say is..." },
+  validate: { label: "Validate", starter: "What I understand about that is..." },
+  ask: { label: "Ask", starter: "Tell me more about..." }
+};
 
 function App() {
   const [volume, setVolume] = useState("1");
@@ -787,6 +828,8 @@ function App() {
   const [savedThisCard, setSavedThisCard] = useState(false);
   const [savedEntryId, setSavedEntryId] = useState(null);
   const [noteDraft, setNoteDraft] = useState("");
+  const [respondStage, setRespondStage] = useState("choose");
+  const [respondChoice, setRespondChoice] = useState(null);
 
   const current = deck[index];
 
@@ -805,6 +848,8 @@ function App() {
     setSavedThisCard(false);
     setSavedEntryId(null);
     setNoteDraft("");
+    setRespondStage("choose");
+    setRespondChoice(null);
   }, [index, deck]);
 
   function saveCurrentCard() {
@@ -982,7 +1027,7 @@ function App() {
 
       <section className="stage">
         <article
-          className={"card " + (current.type === "moment" || current.type === "callback" || current.type === "closing" ? "moment " : current.type === "wild" ? "wild " : "")}
+          className={"card " + (current.type === "moment" || current.type === "callback" || current.type === "closing" ? "moment " : current.type === "wild" ? "wild " : current.type === "respond" ? "respond " : "")}
           style={{ transform: `translateX(${dragX}px) rotate(${dragX / 28}deg)` }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -998,6 +1043,7 @@ function App() {
                   : current.type === "wild" ? "Something different"
                   : current.type === "callback" ? "A quick look back"
                   : current.type === "closing" ? "One last thing"
+                  : current.type === "respond" ? "Pause before you answer"
                   : "Tap to reveal"}
               </div>
             </div>
@@ -1085,6 +1131,72 @@ function App() {
                   />
                 )}
               </div>
+            </div>
+          ) : current.type === "respond" ? (
+            <div className="face-content">
+              <div className="moment-label">RESPOND</div>
+              {respondStage === "choose" && (
+                <>
+                  <div className="moment-title">Don't Answer Yet</div>
+                  <div className="moment-instruction">Respond to what you just heard before you answer yourself.</div>
+                  <div className="respond-options">
+                    {Object.entries(RESPOND_CHOICES).map(([key, opt]) => (
+                      <button
+                        key={key}
+                        className="respond-option"
+                        onPointerDown={e => e.stopPropagation()}
+                        onClick={e => { e.stopPropagation(); setRespondChoice(key); setRespondStage("starter"); }}
+                      >
+                        <span className="respond-option-body">
+                          <span className="respond-option-label">{opt.label}</span>
+                          <span className="respond-option-hint">'{opt.starter}'</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    className="moment-skip"
+                    onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); next(); }}
+                  >
+                    Skip respond
+                  </button>
+                </>
+              )}
+              {respondStage === "starter" && respondChoice && (
+                <>
+                  <div className="moment-title">{RESPOND_CHOICES[respondChoice].label}</div>
+                  <div className="moment-instruction">Say it out loud: '{RESPOND_CHOICES[respondChoice].starter}'</div>
+                  <button
+                    className="moment-skip"
+                    onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); setRespondStage("checkin"); }}
+                  >
+                    Continue
+                  </button>
+                </>
+              )}
+              {respondStage === "checkin" && (
+                <>
+                  <div className="moment-instruction">Did they get you?</div>
+                  <div className="respond-options respond-options-checkin">
+                    <button
+                      className="respond-option"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={e => { e.stopPropagation(); next(); }}
+                    >
+                      Yes, exactly
+                    </button>
+                    <button
+                      className="respond-option"
+                      onPointerDown={e => e.stopPropagation()}
+                      onClick={e => { e.stopPropagation(); setRespondStage("choose"); setRespondChoice(null); }}
+                    >
+                      Not quite
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           ) : (
             <div className="face-content">
