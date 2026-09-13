@@ -783,6 +783,7 @@ function App() {
     }
   });
   const [journalOpen, setJournalOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [savedThisCard, setSavedThisCard] = useState(false);
   const [savedEntryId, setSavedEntryId] = useState(null);
   const [noteDraft, setNoteDraft] = useState("");
@@ -972,21 +973,14 @@ function App() {
         ))}
       </div>
 
-      <nav className="filters">
-        {categories.map(cat => (
-          <button
-            key={cat}
-            onClick={() => selectCategory(cat)}
-            className={"chip " + (category === cat ? "active" : "")}
-          >
-            {cat}
-          </button>
-        ))}
-      </nav>
+      <button className="filter-toggle" onClick={() => setFilterOpen(true)}>
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2.5 4h15M5.5 10h9M8.5 16h3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+        <span>{category === "All" ? "All categories" : category}</span>
+      </button>
 
       <section className="stage">
-        <div className="stack stack-1" />
-        <div className="stack stack-2" />
         <article
           className={"card " + (current.type === "moment" || current.type === "callback" || current.type === "closing" ? "moment " : current.type === "wild" ? "wild " : "")}
           style={{ transform: `translateX(${dragX}px) rotate(${dragX / 28}deg)` }}
@@ -1170,6 +1164,28 @@ function App() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {filterOpen && (
+        <div className="journal-overlay" onClick={() => setFilterOpen(false)}>
+          <div className="journal-sheet" onClick={e => e.stopPropagation()}>
+            <div className="journal-header">
+              <div className="journal-title">Categories</div>
+              <button className="journal-close" onClick={() => setFilterOpen(false)}>Close</button>
+            </div>
+            <div className="filter-grid">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => { selectCategory(cat); setFilterOpen(false); }}
+                  className={"chip " + (category === cat ? "active" : "")}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
