@@ -6,7 +6,7 @@
 // question text (see validateMetadata / getQuestionMetadata), not by
 // array position.
 //
-// Fully populated: V1 = 40, V2 = 73, V3 = 57 (170 total), validated with
+// Fully populated: V1 = 40, V2 = 82, V3 = 63 (185 total), validated with
 // zero problems against the live content. First consumer: main.jsx's
 // Respond mechanic, via getQuestionMetadata() below.
 
@@ -69,7 +69,7 @@ export const THEMES = [
   "memory", "needs", "past_relationships", "perception", "playfulness",
   "pressure", "purpose", "quality_time", "reassurance", "repair",
   "sacrifice", "safety", "social_media", "support", "trust", "values",
-  "vulnerability"
+  "vulnerability", "reciprocity"
 ];
 
 /**
@@ -174,7 +174,7 @@ export const QUESTION_METADATA = [
   { id: "v2-deeper-7", volume: 2, category: "Deeper", q: "What are you most proud of becoming, not achieving?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "affirm", disclosureDemand: "moderate", faithSpecific: false, themes: ["growth", "identity"] },
   { id: "v2-deeper-8", volume: 2, category: "Deeper", q: "What is one belief about yourself that you hope is not true?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["vulnerability", "identity"] },
 
-  // Relationships (17)
+  // Relationships (24)
   { id: "v2-relationships-1", volume: 2, category: "Relationships", q: "What makes you feel chosen in a relationship, not just liked?", conversationType: "needs", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "connection"] },
   { id: "v2-relationships-2", volume: 2, category: "Relationships", q: "What expectation of a partner do you have that you have never clearly said out loud?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["needs", "honesty", "vulnerability"] },
   { id: "v2-relationships-3", volume: 2, category: "Relationships", q: "How do you define a successful relationship?", conversationType: "values", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "low", faithSpecific: false, themes: ["compatibility", "commitment"] },
@@ -192,6 +192,13 @@ export const QUESTION_METADATA = [
   { id: "v2-relationships-15", volume: 2, category: "Relationships", q: "How do we love each other deeply without either of us losing ourselves?", conversationType: "relationship_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["independence", "connection"] },
   { id: "v2-relationships-16", volume: 2, category: "Relationships", q: "What side of yourself does this relationship bring out, and do you like that version of yourself?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["identity", "growth"] },
   { id: "v2-relationships-17", volume: 2, category: "Relationships", q: "When a problem is partly your fault, what helps you take responsibility without becoming defensive?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["accountability", "conflict"] },
+  { id: "v2-relationships-18", volume: 2, category: "Relationships", q: "What do I bring into your life that you would genuinely miss?", conversationType: "appreciation", answerMode: "partner_about_you", responseBehaviour: "affirm", disclosureDemand: "low", faithSpecific: false, themes: ["appreciation", "connection"] },
+  { id: "v2-relationships-19", volume: 2, category: "Relationships", q: "What’s something I do for you that you don’t think I realise matters to you?", conversationType: "appreciation", answerMode: "partner_about_you", responseBehaviour: "affirm", disclosureDemand: "moderate", faithSpecific: false, themes: ["appreciation", "connection"] },
+  { id: "v2-relationships-20", volume: 2, category: "Relationships", q: "What’s something you do for me that you wish I noticed more?", conversationType: "needs", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "appreciation"] },
+  { id: "v2-relationships-21", volume: 2, category: "Relationships", q: "Do you feel appreciated by me, or have some of your contributions become expected?", conversationType: "relationship_reflection", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["appreciation", "honesty"] },
+  { id: "v2-relationships-22", volume: 2, category: "Relationships", q: "Are there things you give in this relationship that don’t come naturally to you?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["sacrifice", "needs"] },
+  { id: "v2-relationships-23", volume: 2, category: "Relationships", q: "What makes you feel like we’re actually a team?", conversationType: "relationship_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["connection", "compatibility"] },
+  { id: "v2-relationships-24", volume: 2, category: "Relationships", q: "What would you notice first if I stopped showing up for you in the way I normally do?", conversationType: "needs", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "appreciation"] },
 
   // Faith & Purpose (15)
   { id: "v2-faith_purpose-1", volume: 2, category: "Faith & Purpose", q: "How would you describe your relationship with God when nobody else is watching?", conversationType: "faith_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: true, themes: ["faith", "honesty"] },
@@ -224,7 +231,7 @@ export const QUESTION_METADATA = [
   { id: "v2-future_compatibility-11", volume: 2, category: "Future & Compatibility", q: "If we had children one day, what would you want them to learn about God from the way we lived at home?", conversationType: "faith_reflection", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: true, themes: ["faith", "children", "family"] },
   { id: "v2-future_compatibility-12", volume: 2, category: "Future & Compatibility", q: "What do you think would be hardest about building a life with me?", conversationType: "self_reflection", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["future", "honesty", "compatibility"] },
 
-  // How You See Me (7)
+  // How You See Me (9)
   { id: "v2-how_you_see_me-1", volume: 2, category: "How You See Me", q: "What do you think I need most from love, even when I do not ask for it directly?", conversationType: "perspective", answerMode: "partner_about_you", responseBehaviour: "affirm", disclosureDemand: "moderate", faithSpecific: false, themes: ["perception", "needs"] },
   { id: "v2-how_you_see_me-2", volume: 2, category: "How You See Me", q: "What do you think I am most afraid could happen between us?", conversationType: "perspective", answerMode: "guess_then_confirm", responseBehaviour: "guess_then_confirm", disclosureDemand: "high", faithSpecific: false, themes: ["perception", "fear"] },
   { id: "v2-how_you_see_me-3", volume: 2, category: "How You See Me", q: "Where do you think I overthink our relationship, and where do you think my concerns are fair?", conversationType: "perspective", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["perception", "honesty"] },
@@ -232,9 +239,11 @@ export const QUESTION_METADATA = [
   { id: "v2-how_you_see_me-5", volume: 2, category: "How You See Me", q: "What is one way you think I love you really well?", conversationType: "appreciation", answerMode: "partner_about_you", responseBehaviour: "affirm", disclosureDemand: "low", faithSpecific: false, themes: ["appreciation", "love_languages"] },
   { id: "v2-how_you_see_me-6", volume: 2, category: "How You See Me", q: "What is one way you think I still need to learn how to love you better?", conversationType: "perspective", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["love_languages", "growth", "honesty"] },
   { id: "v2-how_you_see_me-7", volume: 2, category: "How You See Me", q: "What do you think we bring out in each other, both good and difficult?", conversationType: "relationship_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["connection", "identity"] },
+  { id: "v2-how_you_see_me-8", volume: 2, category: "How You See Me", q: "What do you think I value most about you?", conversationType: "perspective", answerMode: "guess_then_confirm", responseBehaviour: "guess_then_confirm", disclosureDemand: "low", faithSpecific: false, themes: ["appreciation", "perception"] },
+  { id: "v2-how_you_see_me-9", volume: 2, category: "How You See Me", q: "What do you actually value most about your partner?", conversationType: "appreciation", answerMode: "partner_about_you", responseBehaviour: "affirm", disclosureDemand: "low", faithSpecific: false, themes: ["appreciation"] },
 
   // ---------------------------------------------------------------------
-  // Volume 3 (57)
+  // Volume 3 (63)
   // ---------------------------------------------------------------------
   // Love (10)
   { id: "v3-love-1", volume: 3, category: "Love", q: "What's a moment when you felt truly loved by someone — what made it land?", conversationType: "story", answerMode: "both", responseBehaviour: "affirm", disclosureDemand: "low", faithSpecific: false, themes: ["memory", "love_languages"] },
@@ -270,7 +279,7 @@ export const QUESTION_METADATA = [
   { id: "v3-needs_expectations-9", volume: 3, category: "Needs & Expectations", q: "How should we tell each other when we're not feeling loved or considered?", conversationType: "future", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["communication", "needs"] },
   { id: "v3-needs_expectations-10", volume: 3, category: "Needs & Expectations", q: "What does reassurance look like for you?", conversationType: "needs", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["reassurance", "needs"] },
 
-  // Our Relationship (14)
+  // Our Relationship (20)
   { id: "v3-our_relationship-1", volume: 3, category: "Our Relationship", q: "What do you think makes our relationship special?", conversationType: "appreciation", answerMode: "both", responseBehaviour: "affirm", disclosureDemand: "low", faithSpecific: false, themes: ["appreciation", "compatibility"] },
   { id: "v3-our_relationship-2", volume: 3, category: "Our Relationship", q: "What do you think we're doing well?", conversationType: "appreciation", answerMode: "both", responseBehaviour: "affirm", disclosureDemand: "low", faithSpecific: false, themes: ["appreciation"] },
   { id: "v3-our_relationship-3", volume: 3, category: "Our Relationship", q: "Where do you think we're struggling?", conversationType: "relationship_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["honesty", "conflict"] },
@@ -285,6 +294,12 @@ export const QUESTION_METADATA = [
   { id: "v3-our_relationship-12", volume: 3, category: "Our Relationship", q: "What is one thing you think you could improve as my partner?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["accountability", "growth"] },
   { id: "v3-our_relationship-13", volume: 3, category: "Our Relationship", q: "What would make you feel more loved by me?", conversationType: "needs", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "love_languages"] },
   { id: "v3-our_relationship-14", volume: 3, category: "Our Relationship", q: "What would make me feel more loved by you?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "love_languages"] },
+  { id: "v3-our_relationship-15", volume: 3, category: "Our Relationship", q: "Where do you think we contribute differently rather than equally?", conversationType: "relationship_reflection", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "low", faithSpecific: false, themes: ["differences", "compatibility"] },
+  { id: "v3-our_relationship-16", volume: 3, category: "Our Relationship", q: "Is there something you give me that you feel you don't receive back?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["needs", "honesty", "reciprocity"] },
+  { id: "v3-our_relationship-17", volume: 3, category: "Our Relationship", q: "Is there something you receive from me that you don't think you give back?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["needs", "honesty", "reciprocity"] },
+  { id: "v3-our_relationship-18", volume: 3, category: "Our Relationship", q: "Have you ever felt like your partner benefits from you more than you benefit from them?", conversationType: "relationship_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["needs", "honesty", "reciprocity"] },
+  { id: "v3-our_relationship-19", volume: 3, category: "Our Relationship", q: "Is there something you currently do for me that you wouldn't want to keep doing forever?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["boundaries", "sacrifice"] },
+  { id: "v3-our_relationship-20", volume: 3, category: "Our Relationship", q: "Have you ever taken something I do for you for granted?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "share", disclosureDemand: "moderate", faithSpecific: false, themes: ["appreciation", "honesty"] },
 
   // Deeper (15)
   { id: "v3-deeper-1", volume: 3, category: "Deeper", q: "Do you think loving someone is enough to make a relationship work? Why or why not?", conversationType: "opinion", answerMode: "both", responseBehaviour: "share", disclosureDemand: "low", faithSpecific: false, themes: ["values", "compatibility"] },

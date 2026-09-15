@@ -329,6 +329,34 @@ const VOLUME_TWO_CARDS = [
     "q": "When a problem is partly your fault, what helps you take responsibility without becoming defensive?"
   },
   {
+    "category": "Relationships",
+    "q": "What do I bring into your life that you would genuinely miss?"
+  },
+  {
+    "category": "Relationships",
+    "q": "What’s something I do for you that you don’t think I realise matters to you?"
+  },
+  {
+    "category": "Relationships",
+    "q": "What’s something you do for me that you wish I noticed more?"
+  },
+  {
+    "category": "Relationships",
+    "q": "Do you feel appreciated by me, or have some of your contributions become expected?"
+  },
+  {
+    "category": "Relationships",
+    "q": "Are there things you give in this relationship that don’t come naturally to you?"
+  },
+  {
+    "category": "Relationships",
+    "q": "What makes you feel like we’re actually a team?"
+  },
+  {
+    "category": "Relationships",
+    "q": "What would you notice first if I stopped showing up for you in the way I normally do?"
+  },
+  {
     "category": "Faith & Purpose",
     "q": "How would you describe your relationship with God when nobody else is watching?"
   },
@@ -463,6 +491,14 @@ const VOLUME_TWO_CARDS = [
   {
     "category": "How You See Me",
     "q": "What do you think we bring out in each other, both good and difficult?"
+  },
+  {
+    "category": "How You See Me",
+    "q": "What do you think I value most about you?"
+  },
+  {
+    "category": "How You See Me",
+    "q": "What do you actually value most about your partner?"
   }
 ];
 
@@ -516,6 +552,12 @@ What is one thing you think I could improve as your partner?
 What is one thing you think you could improve as my partner?
 What would make you feel more loved by me?
 What would make me feel more loved by you?
+Where do you think we contribute differently rather than equally?
+Is there something you give me that you feel you don't receive back?
+Is there something you receive from me that you don't think you give back?
+Have you ever felt like your partner benefits from you more than you benefit from them?
+Is there something you currently do for me that you wouldn't want to keep doing forever?
+Have you ever taken something I do for you for granted?
   `),
   ...cardsFromText("Deeper", `
 Do you think loving someone is enough to make a relationship work? Why or why not?
@@ -774,9 +816,90 @@ function pickIntervention(context, used, recentMomentTypes, recentWildTypes) {
   return weightedPick(pool, context);
 }
 
+// Phase 3E found that pickIntervention (above) is sound, but WHEN it gets
+// consulted has no awareness of what's accumulated -- the gate is a fixed
+// random countdown, blind to conversationType/disclosureDemand. Phase 3F:
+// two structural signals, chosen because the audit found direct evidence
+// for exactly these two (44% of Volume 2 sessions had a 3+ consecutive
+// high-disclosure run; 59-80% had a 3+ consecutive same-conversationType
+// run) -- themes and family-pair adjacency were explicitly left out
+// (theme prevalence alone explains most clustering without a null-model
+// comparison; pair adjacency needs a product decision, not a statistical
+// one). This never lowers the existing minimum gap -- see MIN_MOMENT_GAP
+// at its only call site in weaveMoments -- it only adds a chance to fire
+// *before* the existing ceiling once that floor has passed. Zero pressure
+// means zero chance, i.e. byte-identical to pre-3F behaviour.
+const TYPE_REPEAT_PRESSURE_THRESHOLD = 3;
+const HIGH_DISCLOSURE_PRESSURE_THRESHOLD = 3;
+const PRESSURE_SINGLE_SIGNAL = 0.25;
+const PRESSURE_BOTH_SIGNALS = 0.5;
+
+function interruptionPressure(consecutiveTypeRun, consecutiveHighDisclosureRun) {
+  const typeNotable = consecutiveTypeRun >= TYPE_REPEAT_PRESSURE_THRESHOLD;
+  const highNotable = consecutiveHighDisclosureRun >= HIGH_DISCLOSURE_PRESSURE_THRESHOLD;
+  if (typeNotable && highNotable) return PRESSURE_BOTH_SIGNALS;
+  if (typeNotable || highNotable) return PRESSURE_SINGLE_SIGNAL;
+  return 0;
+}
+
 const RESPOND_CHANCE = 0.2;
 const RESPOND_MIN_GAP = 5;
 const MAX_RESPONDS = 4;
+
+// Journal entries saved before this schema existed are treated as legacy:
+// no volume/instruction/session to reason about, never recalled before.
+// They stay eligible for the past-session callback tier -- we just don't
+// pretend to know which session or card produced them.
+function normalizeJournalEntry(e) {
+  return { volume: null, instruction: null, sessionId: null, recalledCount: 0, lastRecalledAt: null, ...e };
+}
+
+// Picks which saved entry (if any) a Callback card should surface. Purely
+// mechanical -- recency and recall-count bookkeeping only, never an
+// interpretation of what was saved:
+//   1. this session, never recalled -- most recent first
+//   2. this session, already recalled -- least recently recalled first
+//   3. a past session -- the most recently ACTIVE past session first, then
+//      never-recalled before more-recency within that session, then recency
+//   4. nothing eligible -- caller falls back to the empty-journal copy
+// Called at the moment a Callback card is actually reached (not baked in
+// when the deck is built) -- the journal changes live as the couple saves
+// things while playing, and a callback needs to see saves made earlier in
+// the very same play-through, not just what existed before it started.
+// Each call reads the current, already-updated journal directly, so
+// multiple callbacks reached in one sitting naturally see each other's
+// recalledCount bumps with no virtual/simulated state needed.
+function pickCallbackEntry(journal, sessionId) {
+  const entries = journal.map(normalizeJournalEntry);
+
+  const thisSession = entries.filter(e => e.sessionId === sessionId);
+  const neverRecalled = thisSession.filter(e => e.recalledCount === 0).sort((a, b) => b.savedAt - a.savedAt);
+  if (neverRecalled.length) return { entry: neverRecalled[0], tier: "session" };
+
+  const alreadyRecalled = thisSession
+    .filter(e => e.recalledCount > 0)
+    .sort((a, b) => (a.lastRecalledAt ?? -Infinity) - (b.lastRecalledAt ?? -Infinity));
+  if (alreadyRecalled.length) return { entry: alreadyRecalled[0], tier: "session" };
+
+  const pastSessions = entries.filter(e => e.sessionId !== sessionId);
+  if (pastSessions.length) {
+    const groups = new Map();
+    pastSessions.forEach(e => {
+      if (!groups.has(e.sessionId)) groups.set(e.sessionId, []);
+      groups.get(e.sessionId).push(e);
+    });
+    const mostRecentGroup = [...groups.values()].sort(
+      (a, b) => Math.max(...b.map(e => e.savedAt)) - Math.max(...a.map(e => e.savedAt))
+    )[0];
+    const neverRecalledInGroup = mostRecentGroup.filter(e => e.recalledCount === 0).sort((a, b) => b.savedAt - a.savedAt);
+    const pick = neverRecalledInGroup.length
+      ? neverRecalledInGroup[0]
+      : [...mostRecentGroup].sort((a, b) => b.savedAt - a.savedAt)[0];
+    return { entry: pick, tier: "past" };
+  }
+
+  return null;
+}
 
 function weaveMoments(cards, momentRule, volume) {
   const shuffledCards = shuffle(cards);
@@ -791,13 +914,24 @@ function weaveMoments(cards, momentRule, volume) {
   const recentMomentTypes = [];
   const recentWildTypes = [];
 
+  // Phase 3F structural state -- tracks what's accumulated since the last
+  // actual Moment/Wild Card insertion, for interruptionPressure(). Resets
+  // only on a real insertion (not just a gate check), since an attempt
+  // that finds no eligible candidate hasn't actually changed what the
+  // couple is experiencing.
+  let sinceInterruptionCheck = 0;
+  let consecutiveTypeRun = 0;
+  let consecutiveHighDisclosureRun = 0;
+  let prevConversationType = null;
+
   // Usually around 6 questions, but intentionally unpredictable.
   // Possible gaps: 4–9 questions, weighted toward 5–7 — kept wide enough that a
-  // good conversation has room to breathe between interruptions.
-  const nextGap = () => {
-    const gaps = [4, 5, 5, 6, 6, 6, 7, 7, 8, 9];
-    return gaps[Math.floor(Math.random() * gaps.length)];
-  };
+  // good conversation has room to breathe between interruptions. Shared as a
+  // named array (not just inline in nextGap) so Phase 3F's floor is derived
+  // from it, never a second hand-typed "4" that could drift out of sync.
+  const MOMENT_GAPS = [4, 5, 5, 6, 6, 6, 7, 7, 8, 9];
+  const nextGap = () => MOMENT_GAPS[Math.floor(Math.random() * MOMENT_GAPS.length)];
+  const MIN_MOMENT_GAP = Math.min(...MOMENT_GAPS);
 
   // Callbacks are rarer than moments so there's time to save something first.
   const nextCallbackGap = () => {
@@ -826,6 +960,20 @@ function weaveMoments(cards, momentRule, volume) {
     // for the couple to deal with, just a more precise, per-question signal.
     const meta = getQuestionMetadata(volume, card.category, card.q);
     if (meta) questionEntry.answerMode = meta.answerMode;
+
+    // Phase 3F: update accumulated structural state before the gate below
+    // reads it -- "what has happened recently," not a guess at how it felt.
+    sinceInterruptionCheck++;
+    if (meta) {
+      consecutiveTypeRun = meta.conversationType === prevConversationType ? consecutiveTypeRun + 1 : 1;
+      prevConversationType = meta.conversationType;
+      consecutiveHighDisclosureRun = meta.disclosureDemand === "high" ? consecutiveHighDisclosureRun + 1 : 0;
+    } else {
+      consecutiveTypeRun = 0;
+      consecutiveHighDisclosureRun = 0;
+      prevConversationType = null;
+    }
+
     const respondLine = meta && RESPOND_BEHAVIOUR_COPY[meta.responseBehaviour];
     if (
       respondLine &&
@@ -838,11 +986,20 @@ function weaveMoments(cards, momentRule, volume) {
       sinceRespond = 0;
     }
 
-    // Same trigger/gap as before deciding WHETHER something happens here —
-    // that pacing mechanism is untouched. Only WHICH candidate gets chosen
-    // is new: Context describes recent structure (never a guess at how the
-    // couple feels), and picks come only from what's structurally eligible.
-    if (untilMoment <= 0 && i < shuffledCards.length - 1) {
+    // Phase 3E/3F: WHICH candidate gets chosen was already context-aware
+    // (Context describes recent structure, never a guess at how the couple
+    // feels) -- this is what makes WHETHER/WHEN it happens context-aware
+    // too. untilMoment<=0 is still the guaranteed ceiling, completely
+    // unchanged. adaptiveFire only ever adds an EARLIER chance, never
+    // removes the floor: it can't even be evaluated until
+    // sinceInterruptionCheck has already passed MIN_MOMENT_GAP, the same
+    // minimum the ceiling itself always respected. Zero accumulated
+    // pressure means zero chance, so a session with no repetition behaves
+    // exactly as it did before this phase.
+    const pressure = interruptionPressure(consecutiveTypeRun, consecutiveHighDisclosureRun);
+    const adaptiveFire = sinceInterruptionCheck >= MIN_MOMENT_GAP && pressure > 0 && Math.random() < pressure;
+
+    if ((untilMoment <= 0 || adaptiveFire) && i < shuffledCards.length - 1) {
       const context = {
         lastQuestion: meta
           ? {
@@ -883,14 +1040,37 @@ function weaveMoments(cards, momentRule, volume) {
             if (recentWildTypes.length > RECENT_TYPE_WINDOW) recentWildTypes.shift();
           }
         }
+        // Only an actual insertion changes what the couple experiences --
+        // a gate check that found no eligible candidate hasn't broken
+        // anything, so the accumulated pressure signals stay as they were.
+        consecutiveTypeRun = 0;
+        consecutiveHighDisclosureRun = 0;
       }
+      // untilMoment resets on every gate firing regardless of whether a
+      // candidate was found, exactly as before Phase 3F -- sinceInterruptionCheck
+      // mirrors that same unconditional reset, keeping the floor's meaning
+      // (time since the gate last fired) identical to pre-3F semantics.
       untilMoment = nextGap();
+      sinceInterruptionCheck = 0;
     }
 
     if (untilCallback <= 0 && i > 3 && i < shuffledCards.length - 1 && callbackCount < MAX_CALLBACKS) {
+      // Deliberately just a placeholder -- unlike Moments/Wild Cards, a
+      // Callback's actual content depends on the journal as it stands at
+      // the moment this card is reached, not at deck-build time. If it
+      // were picked here, a save made mid-playthrough (the normal case --
+      // no reshuffle in between) could never be reflected by a Callback
+      // later in this same deck. See pickCallbackEntry, called from the
+      // component's per-card effect instead.
       out.push({ category: "Callback", type: "callback" });
       callbackCount++;
       untilCallback = nextCallbackGap();
+      // A Callback is still a different-mode card from the couple's POV,
+      // same "real adjacency" definition the Phase 3E audit used (any
+      // non-question card breaks a run) -- but it's on its own separate
+      // gap/counter and gets no adaptive trigger of its own, per scope.
+      consecutiveTypeRun = 0;
+      consecutiveHighDisclosureRun = 0;
     }
   });
 
@@ -934,6 +1114,58 @@ const RESPOND_BEHAVIOUR_COPY = {
   tell_more: "Ask them to tell you more about it."
 };
 
+// Phase 4C: "Our Story" journal redesign. Pure, presentation-only helpers --
+// they read the existing (additive) entry schema, never change it.
+const JOURNAL_KIND_LABELS = { question: "QUESTION", moment: "MOMENT", wild: "WILD CARD" };
+
+// Groups entries by calendar day (local time), most recent day first, most
+// recent entry first within a day -- same direction the flat list always
+// sorted in, just partitioned now.
+function groupJournalByDay(journal) {
+  const sorted = [...journal].sort((a, b) => b.savedAt - a.savedAt);
+  const groups = [];
+  let currentKey = null;
+  for (const entry of sorted) {
+    const d = new Date(entry.savedAt);
+    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    if (key !== currentKey) {
+      groups.push({ key, date: d, entries: [] });
+      currentKey = key;
+    }
+    groups[groups.length - 1].entries.push(entry);
+  }
+  return groups;
+}
+
+// "SEPTEMBER 15" for the current year, "SEPTEMBER 15, 2025" otherwise --
+// a journal meant to span years needs the year once it's no longer implied.
+// Built explicitly (not toLocaleDateString(undefined, ...)) because locale
+// ordering isn't guaranteed to put the month first -- the exact wording
+// here was part of the sign-off, not something to leave to the device's
+// locale settings.
+const JOURNAL_MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+function journalGroupHeader(date) {
+  const month = JOURNAL_MONTH_NAMES[date.getMonth()].toUpperCase();
+  const yearSuffix = date.getFullYear() !== new Date().getFullYear() ? `, ${date.getFullYear()}` : "";
+  return `${month} ${date.getDate()}${yearSuffix}`;
+}
+
+// The secondary "what was actually asked/offered" line. Questions always
+// have their own text; Moments prefer the short title Phase 4C started
+// storing separately, falling back to the older combined "title —
+// instruction" string for legacy entries saved before that field existed
+// (never reconstructed, per the sign-off -- if the title wasn't captured,
+// the full original string is the honest fallback). Wild Cards have no
+// title at all, so they always fall through to entry.text too.
+function journalContextLine(entry) {
+  if (entry.type === "question") return entry.text;
+  return entry.title || entry.text;
+}
+
+function journalFramingLine(entry) {
+  return entry.type === "question" ? "You said" : "You captured this";
+}
+
 function App() {
   const [volume, setVolume] = useState("1");
   const activeVolume = VOLUMES[volume];
@@ -944,6 +1176,24 @@ function App() {
   );
 
   const [category, setCategory] = useState("All");
+
+  // Stable for the lifetime of this app instance -- never reset by
+  // resetDeck (unlike the old sessionStart bug this replaces for callback
+  // purposes; see below). This is what "saved this session" actually means.
+  const [sessionId] = useState(() => `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`);
+  // Fixed: this used to be reset inside resetDeck, so it silently meant
+  // "since the last shuffle" instead of "since the app opened" -- kept
+  // (now genuinely fixed) in case other code comes to depend on it, but
+  // the callback system itself keys off sessionId, not this.
+  const [sessionStart] = useState(() => Date.now());
+  const [journal, setJournal] = useState(() => {
+    try {
+      const raw = localStorage.getItem(JOURNAL_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
+  });
   const [deck, setDeck] = useState(() => weaveMoments(VOLUME_ONE_CARDS, undefined, 1));
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -954,27 +1204,21 @@ function App() {
   const timerRef = useRef(null);
   const startX = useRef(null);
 
-  const [sessionStart, setSessionStart] = useState(() => Date.now());
-  const [journal, setJournal] = useState(() => {
-    try {
-      const raw = localStorage.getItem(JOURNAL_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch {
-      return [];
-    }
-  });
   const [journalOpen, setJournalOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [savedThisCard, setSavedThisCard] = useState(false);
   const [savedEntryId, setSavedEntryId] = useState(null);
   const [noteDraft, setNoteDraft] = useState("");
+  const [callbackDisplay, setCallbackDisplay] = useState(null); // { text, note, tier } | null
+  // Phase 4C: editing an existing journal entry's note (separate from
+  // noteDraft above, which is only for the card currently on screen) and
+  // confirming a delete. One active entry at a time for each -- a couple
+  // isn't going to be mid-edit on two memories simultaneously.
+  const [editingEntryId, setEditingEntryId] = useState(null);
+  const [editDraft, setEditDraft] = useState("");
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
   const current = deck[index];
-
-  const sessionEntries = useMemo(
-    () => journal.filter(e => e.savedAt >= sessionStart).sort((a, b) => b.savedAt - a.savedAt),
-    [journal, sessionStart]
-  );
 
   React.useEffect(() => {
     try {
@@ -982,10 +1226,31 @@ function App() {
     } catch {}
   }, [journal]);
 
+  // Runs once per arrival at a card (including revisits via Back/Next).
+  // The Callback pick happens here, not at deck-build time, specifically
+  // so it can see saves made earlier in this same play-through -- see
+  // pickCallbackEntry and the placeholder comment in weaveMoments.
   React.useEffect(() => {
     setSavedThisCard(false);
     setSavedEntryId(null);
     setNoteDraft("");
+
+    if (current?.type === "callback") {
+      const picked = pickCallbackEntry(journal, sessionId);
+      if (picked) {
+        setCallbackDisplay({ text: picked.entry.text, note: picked.entry.note || null, tier: picked.tier });
+        setJournal(j => j.map(e => e.id === picked.entry.id
+          ? { ...e, recalledCount: (e.recalledCount || 0) + 1, lastRecalledAt: Date.now() }
+          : e));
+      } else {
+        setCallbackDisplay(null);
+      }
+    } else {
+      setCallbackDisplay(null);
+    }
+    // Intentionally keyed on [index, deck] only, not journal -- this should
+    // fire once per arrival at a card, not every time the journal changes
+    // for an unrelated reason (e.g. a note being edited elsewhere).
   }, [index, deck]);
 
   function saveCurrentCard() {
@@ -1000,8 +1265,14 @@ function App() {
       category: current.category,
       type: current.type,
       text,
+      title: current.title ?? null,
       note: "",
-      savedAt: Date.now()
+      savedAt: Date.now(),
+      volume: Number(volume),
+      instruction: current.instruction ?? null,
+      sessionId,
+      recalledCount: 0,
+      lastRecalledAt: null
     };
     setJournal(j => [...j, entry]);
     setSavedEntryId(entry.id);
@@ -1012,6 +1283,29 @@ function App() {
   function updateNote(value) {
     setNoteDraft(value);
     setJournal(j => j.map(e => (e.id === savedEntryId ? { ...e, note: value } : e)));
+  }
+
+  // Closing the sheet always clears any in-progress edit/delete-confirm --
+  // reopening it later shouldn't drop the couple back into a stale state
+  // for an entry they may not even remember opening.
+  React.useEffect(() => {
+    if (!journalOpen) {
+      setEditingEntryId(null);
+      setEditDraft("");
+      setConfirmDeleteId(null);
+    }
+  }, [journalOpen]);
+
+  function startEditingNote(entry) {
+    setConfirmDeleteId(null);
+    setEditingEntryId(entry.id);
+    setEditDraft(entry.note || "");
+  }
+
+  function saveEditedNote(id) {
+    setJournal(j => j.map(e => (e.id === id ? { ...e, note: editDraft } : e)));
+    setEditingEntryId(null);
+    setEditDraft("");
   }
 
   function deleteEntry(id) {
@@ -1036,7 +1330,6 @@ function App() {
     setIndex(0);
     setRevealed(false);
     setDragX(0);
-    setSessionStart(Date.now());
   }
 
   function rebuild(nextCategory = category) {
@@ -1148,7 +1441,7 @@ function App() {
         <div className="topbar-right">
           <div className="counter">{index + 1} / {deck.length}</div>
           <button className="journal-toggle" onClick={() => setJournalOpen(true)}>
-            ♥ {journal.length}
+            ♥ Our Story · {journal.length}
           </button>
         </div>
       </header>
@@ -1201,17 +1494,19 @@ function App() {
           {current.type === "callback" ? (
             <div className="face-content">
               <div className="moment-label">CALLBACK</div>
-              {sessionEntries[0] ? (
+              {callbackDisplay ? (
                 <>
-                  <div className="moment-instruction">Go back to something you saved earlier tonight:</div>
-                  <div className="callback-quote">“{sessionEntries[0].text}”</div>
-                  {sessionEntries[0].note && (
-                    <div className="callback-note">You noted: “{sessionEntries[0].note}”</div>
+                  <div className="moment-instruction">
+                    {callbackDisplay.tier === "past" ? "Last time you played, you saved this:" : "You saved this earlier:"}
+                  </div>
+                  <div className="callback-quote">“{callbackDisplay.text}”</div>
+                  {callbackDisplay.note && (
+                    <div className="callback-note">Your note: “{callbackDisplay.note}”</div>
                   )}
                   <div className="moment-instruction">Has anything changed since then, or does it still feel true?</div>
                 </>
               ) : (
-                <div className="moment-instruction">Nothing saved yet tonight. Is there something already asked that you'd want to sit with a little longer?</div>
+                <div className="moment-instruction">Nothing saved yet. Is there something already asked that you'd want to sit with a little longer?</div>
               )}
               <button
                 className="moment-skip"
@@ -1339,24 +1634,72 @@ function App() {
         <div className="journal-overlay" onClick={() => setJournalOpen(false)}>
           <div className="journal-sheet" onClick={e => e.stopPropagation()}>
             <div className="journal-header">
-              <div className="journal-title">Saved moments</div>
+              <div className="journal-title">Our Story</div>
               <button className="journal-close" onClick={() => setJournalOpen(false)}>Close</button>
             </div>
             {journal.length === 0 ? (
-              <div className="journal-empty">Nothing saved yet. Tap the heart on a card to keep it.</div>
+              <div className="journal-empty">Nothing here yet. Save something and it becomes part of your story.</div>
             ) : (
               <div className="journal-list">
-                {[...journal].sort((a, b) => b.savedAt - a.savedAt).map(entry => (
-                  <div key={entry.id} className="journal-entry">
-                    <div className="journal-entry-top">
-                      <span className="journal-entry-category">{entry.category}</span>
-                      <button className="journal-entry-delete" onClick={() => deleteEntry(entry.id)}>×</button>
-                    </div>
-                    <div className="journal-entry-text">{entry.text}</div>
-                    {entry.note && <div className="journal-entry-note">{entry.note}</div>}
-                    <div className="journal-entry-date">
-                      {new Date(entry.savedAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
-                    </div>
+                {groupJournalByDay(journal).map(group => (
+                  <div key={group.key} className="journal-day-group">
+                    <div className="journal-group-header">{journalGroupHeader(group.date)}</div>
+                    {group.entries.map(entry => {
+                      const hasNote = !!entry.note;
+                      const wasRecalled = (entry.recalledCount || 0) > 0;
+                      const isEditing = editingEntryId === entry.id;
+                      const isConfirmingDelete = confirmDeleteId === entry.id;
+                      return (
+                        <div key={entry.id} className="journal-entry">
+                          {isConfirmingDelete ? (
+                            <div className="journal-delete-confirm">
+                              <div className="journal-delete-confirm-text">Delete this memory? This can't be undone.</div>
+                              <div className="journal-delete-confirm-actions">
+                                <button className="journal-confirm-cancel" onClick={() => setConfirmDeleteId(null)}>Cancel</button>
+                                <button className="journal-confirm-delete" onClick={() => { deleteEntry(entry.id); setConfirmDeleteId(null); }}>Delete</button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="journal-entry-top">
+                                <span className="journal-entry-kind">{JOURNAL_KIND_LABELS[entry.type] || entry.type}</span>
+                                <button className="journal-entry-delete" onClick={() => { setConfirmDeleteId(entry.id); setEditingEntryId(null); }}>×</button>
+                              </div>
+
+                              {hasNote && <div className="journal-entry-framing">{journalFramingLine(entry)}</div>}
+                              {hasNote && <div className="journal-entry-note">“{entry.note}”</div>}
+                              <div className={hasNote ? "journal-entry-context" : "journal-entry-context journal-entry-context-primary"}>
+                                {journalContextLine(entry)}
+                              </div>
+
+                              {isEditing ? (
+                                <div className="journal-note-edit" onClick={e => e.stopPropagation()}>
+                                  <input
+                                    className="journal-note-input"
+                                    value={editDraft}
+                                    onChange={e => setEditDraft(e.target.value)}
+                                    placeholder="Write what you want to remember..."
+                                  />
+                                  <div className="journal-note-edit-actions">
+                                    <button className="journal-note-cancel" onClick={() => setEditingEntryId(null)}>Cancel</button>
+                                    <button className="journal-note-save" onClick={() => saveEditedNote(entry.id)}>Save</button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <button className="journal-entry-edit-note" onClick={() => startEditingNote(entry)}>
+                                  {hasNote ? "Edit note" : "Add a note"}
+                                </button>
+                              )}
+
+                              {wasRecalled && <div className="journal-entry-revisit">You saved this earlier</div>}
+                              <div className="journal-entry-date">
+                                {new Date(entry.savedAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 ))}
               </div>
