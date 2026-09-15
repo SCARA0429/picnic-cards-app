@@ -1,6 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
+import { getQuestionMetadata } from "./questionMetadata.js";
+import { getMomentMetadata, getWildCardMetadata } from "./momentMetadata.js";
 
 function cardsFromText(category, text) {
   return text.trim().split("\n").map(q => ({ category, q: q.trim() }));
@@ -29,10 +31,6 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "Playful",
-    "q": "What’s the worst love language to be friends with?"
-  },
-  {
-    "category": "Playful",
     "q": "Would you rather always be chased or always be the one pursuing?"
   },
   {
@@ -57,7 +55,7 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "Getting to Know You",
-    "q": "What’s one thing you definitely believe in?"
+    "q": "What’s something you believe strongly about, even if you’ve never really had to explain why?"
   },
   {
     "category": "Getting to Know You",
@@ -77,7 +75,7 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "Deeper",
-    "q": "What makes life worth living to you?"
+    "q": "What’s a moment recently where you felt genuinely glad to be alive?"
   },
   {
     "category": "Deeper",
@@ -93,7 +91,7 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "Deeper",
-    "q": "How are you, really?"
+    "q": "What’s been taking up the most space in your mind lately?"
   },
   {
     "category": "Relationships",
@@ -105,11 +103,7 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "Relationships",
-    "q": "Admit one of your toxic traits."
-  },
-  {
-    "category": "Relationships",
-    "q": "Would you rather be cheated on physically or emotionally?"
+    "q": "What’s something you sometimes do when you’re hurt that you wish you handled differently?"
   },
   {
     "category": "Relationships",
@@ -157,7 +151,7 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "How You See Me",
-    "q": "Based on what you’ve learned about me, does my social media accurately reflect who I am? Why or why not?"
+    "q": "Do you think people who only know me from social media would be surprised by the real me? How?"
   },
   {
     "category": "How You See Me",
@@ -344,7 +338,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Faith & Purpose",
-    "q": "What does being equally yoked mean to you in real life, beyond simply both being Christian?"
+    "q": "What does being spiritually aligned look like to you in everyday life, beyond simply both being Christian?"
   },
   {
     "category": "Faith & Purpose",
@@ -364,7 +358,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Faith & Purpose",
-    "q": "What boundaries do you believe would protect our purity, trust and relationship with God?"
+    "q": "What boundaries do you think would help protect our trust and our relationship with God?"
   },
   {
     "category": "Faith & Purpose",
@@ -372,7 +366,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Faith & Purpose",
-    "q": "If someone watched your life for a month, what evidence would they see that following Jesus genuinely matters to you?"
+    "q": "What's one everyday moment recently where your faith actually showed up in how you acted?"
   },
   {
     "category": "Faith & Purpose",
@@ -384,7 +378,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Faith & Purpose",
-    "q": "Are we helping each other use our gifts and serve God, or are we mostly just enjoying being together?"
+    "q": "In what ways do we help each other grow spiritually, and are there ways we could do that more intentionally?"
   },
   {
     "category": "Faith & Purpose",
@@ -474,8 +468,7 @@ const VOLUME_TWO_CARDS = [
 
 const VOLUME_THREE_CARDS = [
   ...cardsFromText("Love", `
-What do you believe about love?
-What is love to you?
+What's a moment when you felt truly loved by someone — what made it land?
 What does it mean to love someone beyond just having feelings for them?
 What do you think are the foundations of a healthy relationship?
 What does loyalty mean to you in a relationship?
@@ -494,8 +487,6 @@ What parts of yourself do you feel I don't fully understand yet?
 What are your goals for yourself over the next year?
 What do you want your partner to understand about the person you're becoming?
 What makes you feel genuinely seen and understood by your partner?
-What does quality time mean to you?
-How important is communication to you in a relationship?
 What makes you feel emotionally connected to your partner?
   `),
   ...cardsFromText("Needs & Expectations", `
@@ -512,7 +503,6 @@ What does reassurance look like for you?
   `),
   ...cardsFromText("Our Relationship", `
 What do you think makes our relationship special?
-What do you think makes our relationship powerful?
 What do you think we're doing well?
 Where do you think we're struggling?
 Do you feel like we're growing together or becoming stagnant? Why?
@@ -643,25 +633,20 @@ const VOLUME_THREE_WILD_CARDS = [
   { category: "Wild Card", type: "wild", instruction: "Write a message to each other on small pieces of paper. Open it after you've left." }
 ];
 
-// Moments and wild cards are shared across every volume, so any of them can show up
-// no matter which volume you're playing.
-const CROSS_VOLUME_MOMENTS = [...VOLUME_ONE_MOMENTS, ...VOLUME_TWO_MOMENTS, ...VOLUME_THREE_WILD_CARDS];
-
 // This one is guaranteed to show up in every volume's deck, exactly once.
 const MUST_INCLUDE_MOMENT = VOLUME_THREE_WILD_CARDS.find(
   c => c.instruction === "Write a message to each other on small pieces of paper. Open it after you've left."
 );
 
 const VOLUMES = {
-  1: { label: "Volume 1", note: "Original", cards: VOLUME_ONE_CARDS, moments: CROSS_VOLUME_MOMENTS },
+  1: { label: "Volume 1", note: "Original", cards: VOLUME_ONE_CARDS },
   2: {
     label: "Volume 2",
     note: "New questions",
     cards: VOLUME_TWO_CARDS,
-    moments: CROSS_VOLUME_MOMENTS,
     momentRule: "Both comfortable, or skip. No explanation needed."
   },
-  3: { label: "Volume 3", note: "Three levels", cards: VOLUME_THREE_CARDS, moments: CROSS_VOLUME_MOMENTS }
+  3: { label: "Volume 3", note: "Three levels", cards: VOLUME_THREE_CARDS }
 };
 
 // Appreciation and listening/vulnerability moments show up more often than the rest.
@@ -676,22 +661,135 @@ function weightedMomentPool(moments) {
   return pool;
 }
 
+// Phase 3D: Moments and Wild Cards are kept as two separate candidate
+// pools, not one merged list — a Moment should primarily respond to
+// conversational context, a Wild Card should primarily interrupt
+// regardless of it. The must-include Wild Card is excluded here since
+// it's guaranteed separately, unconditionally, after the main loop below.
+const MOMENT_POOL = weightedMomentPool([...VOLUME_ONE_MOMENTS, ...VOLUME_TWO_MOMENTS]);
+const WILD_POOL = VOLUME_THREE_WILD_CARDS.filter(w => w !== MUST_INCLUDE_MOMENT);
+
+// How many of the most recently placed Moments/Wild Cards (tracked
+// per-kind — a Wild Card in between doesn't reset this) to avoid repeating
+// the momentType/wildType of. Phase 3 tuning pass: this was 3 (anywhere in
+// the last 3), which fought the 2x MOMENT_WEIGHTS boost on
+// appreciation/vulnerability — those types get picked disproportionately
+// often *by design*, so they were also disproportionately likely to
+// already be "recent" and get excluded by this rule, measurably
+// suppressing exactly the types meant to be favoured (simulation: 0.73x
+// and 0.84x their pool share). Narrowed to 1 (blocks only an immediate
+// repeat, i.e. the exact same type back to back) to preserve variety
+// without fighting the weighting. Test independently before touching
+// MOMENT_WEIGHTS itself, per the tuning plan.
+const RECENT_TYPE_WINDOW = 1;
+
+// Structural eligibility only — boolean, never a score. `constraint` is a
+// compatibleWith/avoidWhen object like { disclosureDemand: ["high"] };
+// true when every field it names matches the corresponding value on
+// lastQuestion. No lastQuestion (shouldn't happen with full metadata
+// coverage, but handled defensively) never counts as a match either way.
+function constraintMatches(constraint, lastQuestion) {
+  if (!lastQuestion) return false;
+  return Object.entries(constraint).every(([field, values]) => values.includes(lastQuestion[field]));
+}
+
+// eligible / excluded, never a score. No compatibleWith or avoidWhen at
+// all means broadly eligible on purpose — most Moments (a synchrony
+// palate cleanser, most appreciation prompts) and almost all Wild Cards
+// don't need to be contextual to do their job.
+function isContextEligible(meta, context) {
+  if (!meta) return true;
+  if (meta.avoidWhen && constraintMatches(meta.avoidWhen, context.lastQuestion)) return false;
+  if (meta.compatibleWith && !constraintMatches(meta.compatibleWith, context.lastQuestion)) return false;
+  return true;
+}
+
+// Candidate pool → avoidWhen/compatibleWith → recent-type check → eligible
+// pool, exactly the pipeline stages agreed on. Falls back in stages
+// (drop the recent-type check, then drop context entirely) rather than
+// ever returning nothing while unused candidates still exist — context
+// narrows the pool, it never blocks insertion on its own.
+function eligibleCandidates(pool, getMeta, used, recentTypes, typeField, context) {
+  const unused = pool
+    .filter(c => !used.has(c.instruction))
+    .map(c => ({ card: c, meta: getMeta(c.instruction) }));
+  const pass = (list, checkType) =>
+    list.filter(({ meta }) => {
+      if (checkType && meta && recentTypes.includes(meta[typeField])) return false;
+      return isContextEligible(meta, context);
+    });
+  const strict = pass(unused, true);
+  if (strict.length) return strict;
+  const relaxed = pass(unused, false);
+  if (relaxed.length) return relaxed;
+  return unused;
+}
+
+// Phase 3 tuning pass: eligibility alone made a compatibleWith match no
+// more likely to be picked than any unconstrained candidate, so the two
+// Moments that actually declare one ("Tell Me More"/"Listen To Me") were
+// getting drowned out by the ~73 other always-eligible Moments (simulation:
+// 0.8% of picks). A candidate whose compatibleWith is genuinely satisfied
+// right now gets extra selection weight — still fully probabilistic, never
+// guaranteed (Picnic can still do nothing). Everything without a satisfied
+// compatibleWith (the large majority) keeps the same baseline weight as
+// before; nothing changes for them.
+const CONTEXTUAL_MATCH_WEIGHT = 4;
+
+function candidateWeight(meta, context) {
+  if (meta?.compatibleWith && constraintMatches(meta.compatibleWith, context.lastQuestion)) {
+    return CONTEXTUAL_MATCH_WEIGHT;
+  }
+  return 1;
+}
+
+function weightedPick(list, context) {
+  const weights = list.map(x => candidateWeight(x.meta, context));
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = Math.random() * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return list[i];
+  }
+  return list[list.length - 1];
+}
+
+// Follow-up fix: contextual weighting must only decide WHICH card wins
+// within a pool, never silently shift how often a Moment vs. a Wild Card
+// gets drawn in the first place. So the Moment-vs-Wild-Card pool is chosen
+// first, by pool size alone — exactly reproducing the odds a plain
+// uniform draw from the old combined list would have given each pool —
+// and only THEN is contextual weight applied, strictly within whichever
+// pool was chosen. A contextually-boosted Moment can now win more often
+// against other Moments; it can never pull selection odds away from Wild
+// Cards to do it.
+function pickIntervention(context, used, recentMomentTypes, recentWildTypes) {
+  const moments = eligibleCandidates(MOMENT_POOL, getMomentMetadata, used, recentMomentTypes, "momentType", context)
+    .map(x => ({ ...x, kind: "moment" }));
+  const wilds = eligibleCandidates(WILD_POOL, getWildCardMetadata, used, recentWildTypes, "wildType", context)
+    .map(x => ({ ...x, kind: "wild" }));
+  const totalEligible = moments.length + wilds.length;
+  if (totalEligible === 0) return null;
+  const pool = Math.random() < moments.length / totalEligible ? moments : wilds;
+  return weightedPick(pool, context);
+}
+
 const RESPOND_CHANCE = 0.2;
 const RESPOND_MIN_GAP = 5;
 const MAX_RESPONDS = 4;
 
-function weaveMoments(cards, moments, momentRule) {
+function weaveMoments(cards, momentRule, volume) {
   const shuffledCards = shuffle(cards);
-  // The must-include moment is guaranteed separately below, so it's left out of the
-  // random pool here to avoid it potentially showing up twice.
-  const randomPool = moments.filter(m => m !== MUST_INCLUDE_MOMENT);
-  const shuffledMoments = shuffle(weightedMomentPool(randomPool));
   const out = [];
-  let momentIndex = 0;
   let callbackCount = 0;
   const MAX_CALLBACKS = 3;
   let respondCount = 0;
   let sinceRespond = RESPOND_MIN_GAP;
+  const usedInstructions = new Set();
+  let sinceMomentCount = 0;
+  let sinceWildCardCount = 0;
+  const recentMomentTypes = [];
+  const recentWildTypes = [];
 
   // Usually around 6 questions, but intentionally unpredictable.
   // Possible gaps: 4–9 questions, weighted toward 5–7 — kept wide enough that a
@@ -718,31 +816,74 @@ function weaveMoments(cards, moments, momentRule) {
     untilMoment--;
     untilCallback--;
     sinceRespond++;
+    sinceMomentCount++;
+    sinceWildCardCount++;
 
-    // Occasionally attach a short "how to respond" instruction to the question
-    // itself, instead of interrupting with a separate card. The category decides
-    // the instruction automatically — no mode picker for the couple to deal with.
-    const respondPrompt = RESPOND_PROMPTS[card.category];
+    // The question's own metadata (not its category) decides both the rule
+    // line's phrasing (answerMode, read at render time) and whether it
+    // occasionally gets a short "how to respond" instruction attached
+    // instead of interrupting with a separate card — still no mode picker
+    // for the couple to deal with, just a more precise, per-question signal.
+    const meta = getQuestionMetadata(volume, card.category, card.q);
+    if (meta) questionEntry.answerMode = meta.answerMode;
+    const respondLine = meta && RESPOND_BEHAVIOUR_COPY[meta.responseBehaviour];
     if (
-      respondPrompt &&
+      respondLine &&
       sinceRespond >= RESPOND_MIN_GAP &&
       respondCount < MAX_RESPONDS &&
       Math.random() < RESPOND_CHANCE
     ) {
-      questionEntry.respondPrompt = respondPrompt;
+      questionEntry.respondPrompt = respondLine;
       respondCount++;
       sinceRespond = 0;
     }
 
-    if (untilMoment <= 0 && i < shuffledCards.length - 1 && momentIndex < shuffledMoments.length) {
-      const m = shuffledMoments[momentIndex % shuffledMoments.length];
-      out.push({
-        ...m,
-        category: m.category || "Moment",
-        type: m.type || "moment",
-        comfortRule: momentRule
-      });
-      momentIndex++;
+    // Same trigger/gap as before deciding WHETHER something happens here —
+    // that pacing mechanism is untouched. Only WHICH candidate gets chosen
+    // is new: Context describes recent structure (never a guess at how the
+    // couple feels), and picks come only from what's structurally eligible.
+    if (untilMoment <= 0 && i < shuffledCards.length - 1) {
+      const context = {
+        lastQuestion: meta
+          ? {
+              conversationType: meta.conversationType,
+              answerMode: meta.answerMode,
+              responseBehaviour: meta.responseBehaviour,
+              disclosureDemand: meta.disclosureDemand,
+              faithSpecific: meta.faithSpecific,
+              themes: meta.themes
+            }
+          : null,
+        sinceMoment: sinceMomentCount,
+        sinceRespond,
+        sinceWildCard: sinceWildCardCount,
+        recentlyUsedMomentTypes: recentMomentTypes,
+        recentlyUsedWildTypes: recentWildTypes
+      };
+      const picked = pickIntervention(context, usedInstructions, recentMomentTypes, recentWildTypes);
+      if (picked) {
+        const m = picked.card;
+        out.push({
+          ...m,
+          category: m.category || "Moment",
+          type: m.type || "moment",
+          comfortRule: momentRule
+        });
+        usedInstructions.add(m.instruction);
+        if (picked.kind === "moment") {
+          sinceMomentCount = 0;
+          if (picked.meta) {
+            recentMomentTypes.push(picked.meta.momentType);
+            if (recentMomentTypes.length > RECENT_TYPE_WINDOW) recentMomentTypes.shift();
+          }
+        } else {
+          sinceWildCardCount = 0;
+          if (picked.meta) {
+            recentWildTypes.push(picked.meta.wildType);
+            if (recentWildTypes.length > RECENT_TYPE_WINDOW) recentWildTypes.shift();
+          }
+        }
+      }
       untilMoment = nextGap();
     }
 
@@ -779,23 +920,18 @@ function shuffle(items) {
 
 const JOURNAL_KEY = "picnic-cards-journal-v1";
 
-// Interim, deterministic category -> response-instruction mapping. There is no
-// chooser: the category decides which single instruction shows, in plain language.
-// This will move to per-question metadata once the full deck gets an audit pass;
-// category is the only signal available until then.
-// "How You See Me" already has its own perception check built into ruleFor()
-// below, so a second instruction there would be redundant. Playful and
-// Getting to Know You are left out on purpose — they stay light, "both answer."
-const RESPOND_PROMPTS = {
-  "Deeper": "Tell each other what you heard.",
-  "Relationships": "Tell each other what you heard.",
-  "Needs & Expectations": "Tell each other what you heard.",
-  "Our Relationship": "Tell each other what you heard.",
-  "Faith & Purpose": "Tell each other what you heard.",
-  "Story & Identity": "Ask each other one thing you'd like to understand better.",
-  "Knowing Each Other": "Ask each other one thing you'd like to understand better.",
-  "Future & Compatibility": "Ask each other one thing you'd like to understand better.",
-  "Love": "Tell each other what you appreciated in what you heard."
+// Response-instruction copy, keyed by each question's own responseBehaviour
+// metadata (src/questionMetadata.js) instead of its category -- a question
+// decides its response instruction on its own merits now, not by which
+// category it happens to sit in. Behaviours with no entry here show no
+// extra line on purpose: "guess_then_confirm" is already carried by the
+// rule line itself (see ruleFor), and "none"/"share" mean no response
+// ritual is appropriate for that card.
+const RESPOND_BEHAVIOUR_COPY = {
+  reflect_back: "Tell each other what you heard.",
+  ask_follow_up: "Ask each other one thing you'd like to understand better.",
+  affirm: "Tell each other what you appreciated in what you heard.",
+  tell_more: "Ask them to tell you more about it."
 };
 
 function App() {
@@ -808,7 +944,7 @@ function App() {
   );
 
   const [category, setCategory] = useState("All");
-  const [deck, setDeck] = useState(() => weaveMoments(VOLUME_ONE_CARDS, CROSS_VOLUME_MOMENTS));
+  const [deck, setDeck] = useState(() => weaveMoments(VOLUME_ONE_CARDS, undefined, 1));
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [dragX, setDragX] = useState(0);
@@ -882,13 +1018,20 @@ function App() {
     setJournal(j => j.filter(e => e.id !== id));
   }
 
-  function resetDeck(source, nextCategory, moments = activeVolume.moments, momentRule = activeVolume.momentRule) {
+  function resetDeck(source, nextCategory, volumeNumber, momentRule = activeVolume.momentRule) {
     const cards = nextCategory === "All"
       ? source
       : source.filter(c => c.category === nextCategory);
     const nextDeck = nextCategory === "All"
-      ? weaveMoments(cards, moments, momentRule)
-      : [...shuffle(cards.map(c => ({...c, type:"question"}))), { category: "Closing", type: "closing" }];
+      ? weaveMoments(cards, momentRule, volumeNumber)
+      : [
+          ...shuffle(cards.map(c => ({
+            ...c,
+            type: "question",
+            answerMode: getQuestionMetadata(volumeNumber, c.category, c.q)?.answerMode
+          }))),
+          { category: "Closing", type: "closing" }
+        ];
     setDeck(nextDeck);
     setIndex(0);
     setRevealed(false);
@@ -897,12 +1040,12 @@ function App() {
   }
 
   function rebuild(nextCategory = category) {
-    resetDeck(activeCards, nextCategory);
+    resetDeck(activeCards, nextCategory, Number(volume));
   }
 
   function selectCategory(cat) {
     setCategory(cat);
-    resetDeck(activeCards, cat);
+    resetDeck(activeCards, cat, Number(volume));
   }
 
   function selectVolume(nextVolume) {
@@ -910,7 +1053,7 @@ function App() {
     const next = VOLUMES[nextVolume];
     setVolume(nextVolume);
     setCategory("All");
-    resetDeck(next.cards, "All", next.moments, next.momentRule);
+    resetDeck(next.cards, "All", Number(nextVolume), next.momentRule);
   }
 
   function next() {
@@ -950,13 +1093,19 @@ function App() {
     startX.current = null;
   }
 
-  function ruleFor(cat) {
-    if (cat === "How You See Me" || cat === "Perception") {
+  // Driven by the question's own answerMode metadata now, not its category
+  // string -- this is what lets "How You See Me" split cleanly between
+  // cards with a real guessable answer (guess_then_confirm) and cards that
+  // are just an open, no-right-answer read on a partner (partner_about_you),
+  // instead of every card in the category getting identical rule text.
+  function ruleFor(answerMode) {
+    if (answerMode === "guess_then_confirm") {
       return "The other person answers first. Then say whether they read you correctly.";
     }
-    return cat === "Reflection"
-      ? "The other person answers first. Take your time with what follows."
-      : "Both answer. If the conversation gets good, stay there.";
+    if (answerMode === "partner_about_you") {
+      return "The other person answers first. There's no right answer — just what they see.";
+    }
+    return "Both answer. If the conversation gets good, stay there.";
   }
 
   function startTimer(seconds) {
@@ -1134,7 +1283,7 @@ function App() {
           ) : (
             <div className="face-content">
               <div className="question">{current.q}</div>
-              <div className="rule">{ruleFor(current.category)}</div>
+              <div className="rule">{ruleFor(current.answerMode)}</div>
               {current.respondPrompt && (
                 <div className="respond-line">{current.respondPrompt}</div>
               )}
