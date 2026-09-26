@@ -111,7 +111,7 @@ const VOLUME_ONE_CARDS = [
   },
   {
     "category": "Relationships",
-    "q": "What do all of your exes or previous romantic interests have in common?"
+    "q": "Is anything from a past relationship still affecting how you show up in this one?"
   },
   {
     "category": "Relationships",
@@ -190,7 +190,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Playful",
-    "q": "What is something you want us to try together purely because it would be fun?"
+    "q": "What’s something you’d love for us to turn into a tradition?"
   },
   {
     "category": "Playful",
@@ -206,7 +206,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Story & Identity",
-    "q": "Which values from your childhood do you want to keep, and which ones do you want to rewrite?"
+    "q": "What from your parents’ relationship do you want to bring into ours, and what do you want to leave behind?"
   },
   {
     "category": "Story & Identity",
@@ -234,7 +234,7 @@ const VOLUME_TWO_CARDS = [
   },
   {
     "category": "Deeper",
-    "q": "What part of your life feels unresolved right now?"
+    "q": "What are you currently working through that I don’t see, if anything?"
   },
   {
     "category": "Deeper",
@@ -506,8 +506,8 @@ const VOLUME_THREE_CARDS = [
   ...cardsFromText("Love", `
 What's a moment when you felt truly loved by someone — what made it land?
 What does it mean to love someone beyond just having feelings for them?
-What do you think are the foundations of a healthy relationship?
-What does loyalty mean to you in a relationship?
+Do you feel like you can fully trust me? If not, what would help you trust me more?
+How do you define cheating?
 What does it mean to be teachable in a relationship?
 Do you believe love requires change? If so, what kind of change?
 How do you know when someone truly loves you?
@@ -524,11 +524,11 @@ What are your goals for yourself over the next year?
 What do you want your partner to understand about the person you're becoming?
 What makes you feel genuinely seen and understood by your partner?
 What makes you feel emotionally connected to your partner?
+What do you find difficult to open up to me about, if anything?
   `),
   ...cardsFromText("Needs & Expectations", `
 What do you need from your partner to feel loved?
 What do you need from me specifically?
-What do you think your responsibility is toward my needs?
 What needs do you believe are your own responsibility and shouldn't be placed entirely on your partner?
 How should two people handle it when their needs are different?
 What does meeting each other halfway actually look like to you?
@@ -541,13 +541,12 @@ What does reassurance look like for you?
 What do you think makes our relationship special?
 What do you think we're doing well?
 Where do you think we're struggling?
-Do you feel like we're growing together or becoming stagnant? Why?
+What's something we used to do at the beginning of our relationship that you miss the most?
 How do you honestly feel about our communication right now?
 Do you feel emotionally connected to me right now?
-Do you feel like we're intentional about spending time with each other?
+What's one small thing we could do this week that would make us feel more connected?
 What do you think we need more of in our relationship?
 What do you think we need less of?
-Is there anything you've been feeling in our relationship that you haven't known how to bring up?
 What is one thing you think I could improve as your partner?
 What is one thing you think you could improve as my partner?
 What would make you feel more loved by me?
@@ -569,11 +568,10 @@ How do you want us to handle conflict when one of us feels hurt?
 What does healthy communication look like when you're overwhelmed?
 What do you think your partner should never have to beg for?
 What does being intentional with someone you love look like?
-What do you think we owe each other in a relationship?
 What would make you look back a year from now and say, “Our relationship has genuinely grown”?
 What are you willing to change about yourself for the sake of our relationship?
 What are you unwilling to compromise on in a relationship?
-What does being loved by me look like to you?
+What does being loved by me feel like?
 Do you feel like I am loving you in the way you need to be loved? And if not, what would you want me to understand?
   `)
 ];
@@ -672,7 +670,8 @@ const VOLUME_THREE_WILD_CARDS = [
   { category: "Wild Card", type: "wild", instruction: "Give your partner a compliment you don't think they hear enough." },
   { category: "Wild Card", type: "wild", instruction: "Ask a question you'd be too afraid to ask. Something you wouldn't normally dare to ask." },
   { category: "Wild Card", type: "wild", instruction: "Make an assumption about me." },
-  { category: "Wild Card", type: "wild", instruction: "Write a message to each other on small pieces of paper. Open it after you've left." }
+  { category: "Wild Card", type: "wild", instruction: "Write a message to each other on small pieces of paper. Open it after you've left." },
+  { category: "Wild Card", type: "wild", instruction: "Do your best impression of me." }
 ];
 
 // This one is guaranteed to show up in every volume's deck, exactly once.

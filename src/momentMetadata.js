@@ -210,7 +210,8 @@ export const WILD_CARD_METADATA = [
   { id: "wild-10", type: "wild", instruction: "Give your partner a compliment you don't think they hear enough.", wildType: "appreciation", themes: ["appreciation"] },
   { id: "wild-11", type: "wild", instruction: "Ask a question you'd be too afraid to ask. Something you wouldn't normally dare to ask.", wildType: "vulnerability", themes: ["vulnerability", "honesty"], avoidWhen: { disclosureDemand: ["high"] } },
   { id: "wild-12", type: "wild", instruction: "Make an assumption about me.", wildType: "play", themes: ["playfulness", "perception"] },
-  { id: "wild-13", type: "wild", instruction: "Write a message to each other on small pieces of paper. Open it after you've left.", wildType: "delayed", themes: ["vulnerability", "memory"] }
+  { id: "wild-13", type: "wild", instruction: "Write a message to each other on small pieces of paper. Open it after you've left.", wildType: "delayed", themes: ["vulnerability", "memory"] },
+  { id: "wild-14", type: "wild", instruction: "Do your best impression of me.", wildType: "play", themes: ["playfulness", "perception"], avoidWhen: { disclosureDemand: ["high"] } }
 ];
 
 // id helpers, mirroring makeQuestionId's role -- population uses these
