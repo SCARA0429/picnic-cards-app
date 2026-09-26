@@ -6,7 +6,7 @@
 // question text (see validateMetadata / getQuestionMetadata), not by
 // array position.
 //
-// Fully populated: V1 = 40, V2 = 82, V3 = 61 (183 total), validated with
+// Fully populated: V1 = 40, V2 = 82, V3 = 59 (181 total), validated with
 // zero problems against the live content. First consumer: main.jsx's
 // Respond mechanic, via getQuestionMetadata() below.
 
@@ -268,9 +268,8 @@ export const QUESTION_METADATA = [
   { id: "v3-knowing_each_other-8", volume: 3, category: "Knowing Each Other", q: "What makes you feel emotionally connected to your partner?", conversationType: "needs", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: false, themes: ["connection", "needs"] },
   { id: "v3-knowing_each_other-9", volume: 3, category: "Knowing Each Other", q: "What do you find difficult to open up to me about, if anything?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["honesty", "vulnerability", "communication"] },
 
-  // Needs & Expectations (9)
+  // Needs & Expectations (8)
   { id: "v3-needs_expectations-1", volume: 3, category: "Needs & Expectations", q: "What do you need from your partner to feel loved?", conversationType: "needs", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "love_languages"] },
-  { id: "v3-needs_expectations-2", volume: 3, category: "Needs & Expectations", q: "What do you need from me specifically?", conversationType: "needs", answerMode: "partner_about_you", responseBehaviour: "reflect_back", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs"] },
   { id: "v3-needs_expectations-4", volume: 3, category: "Needs & Expectations", q: "What needs do you believe are your own responsibility and shouldn't be placed entirely on your partner?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "independence", "accountability"] },
   { id: "v3-needs_expectations-5", volume: 3, category: "Needs & Expectations", q: "How should two people handle it when their needs are different?", conversationType: "future", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "low", faithSpecific: false, themes: ["needs", "differences"] },
   { id: "v3-needs_expectations-6", volume: 3, category: "Needs & Expectations", q: "What does meeting each other halfway actually look like to you?", conversationType: "values", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "low", faithSpecific: false, themes: ["compromise", "needs"] },
@@ -300,7 +299,7 @@ export const QUESTION_METADATA = [
   { id: "v3-our_relationship-19", volume: 3, category: "Our Relationship", q: "Is there something you currently do for me that you wouldn't want to keep doing forever?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["boundaries", "sacrifice"] },
   { id: "v3-our_relationship-20", volume: 3, category: "Our Relationship", q: "Have you ever taken something I do for you for granted?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "share", disclosureDemand: "moderate", faithSpecific: false, themes: ["appreciation", "honesty"] },
 
-  // Deeper (14)
+  // Deeper (13)
   { id: "v3-deeper-1", volume: 3, category: "Deeper", q: "Do you think loving someone is enough to make a relationship work? Why or why not?", conversationType: "opinion", answerMode: "both", responseBehaviour: "share", disclosureDemand: "low", faithSpecific: false, themes: ["values", "compatibility"] },
   { id: "v3-deeper-2", volume: 3, category: "Deeper", q: "What does choosing someone look like to you beyond saying “I love you”?", conversationType: "values", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: false, themes: ["commitment", "values"] },
   { id: "v3-deeper-3", volume: 3, category: "Deeper", q: "If you know your partner has a need you struggle with, what do you think your responsibility is?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "accountability"] },
@@ -311,7 +310,6 @@ export const QUESTION_METADATA = [
   { id: "v3-deeper-8", volume: 3, category: "Deeper", q: "What do you think your partner should never have to beg for?", conversationType: "values", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: false, themes: ["needs", "values"] },
   { id: "v3-deeper-9", volume: 3, category: "Deeper", q: "What does being intentional with someone you love look like?", conversationType: "values", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "low", faithSpecific: false, themes: ["commitment", "values"] },
   { id: "v3-deeper-11", volume: 3, category: "Deeper", q: "What would make you look back a year from now and say, “Our relationship has genuinely grown”?", conversationType: "future", answerMode: "both", responseBehaviour: "ask_follow_up", disclosureDemand: "moderate", faithSpecific: false, themes: ["growth", "future"] },
-  { id: "v3-deeper-12", volume: 3, category: "Deeper", q: "What are you willing to change about yourself for the sake of our relationship?", conversationType: "self_reflection", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["growth", "sacrifice"] },
   { id: "v3-deeper-13", volume: 3, category: "Deeper", q: "What are you unwilling to compromise on in a relationship?", conversationType: "values", answerMode: "both", responseBehaviour: "reflect_back", disclosureDemand: "high", faithSpecific: false, themes: ["boundaries", "values"] },
   { id: "v3-deeper-16", volume: 3, category: "Deeper", q: "What does being loved by me feel like?", conversationType: "appreciation", answerMode: "partner_about_you", responseBehaviour: "affirm", disclosureDemand: "moderate", faithSpecific: false, themes: ["love_languages", "connection"] },
   { id: "v3-deeper-15", volume: 3, category: "Deeper", q: "Do you feel like I am loving you in the way you need to be loved? And if not, what would you want me to understand?", conversationType: "relationship_reflection", answerMode: "partner_about_you", responseBehaviour: "share", disclosureDemand: "high", faithSpecific: false, themes: ["love_languages", "honesty", "vulnerability"] }

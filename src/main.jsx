@@ -528,7 +528,6 @@ What do you find difficult to open up to me about, if anything?
   `),
   ...cardsFromText("Needs & Expectations", `
 What do you need from your partner to feel loved?
-What do you need from me specifically?
 What needs do you believe are your own responsibility and shouldn't be placed entirely on your partner?
 How should two people handle it when their needs are different?
 What does meeting each other halfway actually look like to you?
@@ -569,7 +568,6 @@ What does healthy communication look like when you're overwhelmed?
 What do you think your partner should never have to beg for?
 What does being intentional with someone you love look like?
 What would make you look back a year from now and say, “Our relationship has genuinely grown”?
-What are you willing to change about yourself for the sake of our relationship?
 What are you unwilling to compromise on in a relationship?
 What does being loved by me feel like?
 Do you feel like I am loving you in the way you need to be loved? And if not, what would you want me to understand?
